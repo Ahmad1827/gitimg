@@ -54,7 +54,6 @@
     }
     .gh-nav-links { display: flex; gap: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); }
     .gh-nav-links a { color: var(--text-main); }
-    .gh-nav-links a:hover { color: var(--text-muted); text-decoration: none; }
 
     .repo-header {
       background-color: var(--bg-surface);
@@ -76,7 +75,6 @@
       align-items: center;
       gap: 6px;
     }
-    .repo-breadcrumb a { font-weight: 600; }
     .project-selector {
       background: var(--bg-subtle);
       border: 1px solid var(--border-default);
@@ -138,48 +136,16 @@
 
     .main-column { min-width: 0; }
 
-    .view-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .branch-selector {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-default);
-      color: var(--text-main);
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .toolbar-right { display: flex; align-items: center; gap: 8px; }
-    .btn-toggle {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-default);
-      color: var(--text-main);
-      padding: 5px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-    }
-    .btn-toggle.active { background: var(--bg-subtle); border-color: #8b949e; }
-
     .commit-banner {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
-      border-radius: 6px 6px 0 0;
+      border-radius: 6px;
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 13px;
-      border-bottom: 1px solid var(--border-default);
+      margin-bottom: 20px;
     }
     .commit-author-section { display: flex; align-items: center; gap: 8px; }
     .avatar-sm {
@@ -197,75 +163,166 @@
     .commit-msg { color: var(--text-main); font-weight: 500; }
     .commit-hash { font-family: var(--font-mono); color: var(--text-muted); font-size: 12px; }
 
-    .art-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .art-card {
+    .artwork-group-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
       border-radius: 8px;
+      margin-bottom: 24px;
       overflow: hidden;
+    }
+    .artwork-primary-preview {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      border-bottom: 1px solid var(--border-default);
+      background: #010409;
+    }
+    .primary-img-wrapper {
+      position: relative;
+      background: #000;
       display: flex;
-      flex-direction: column;
-      transition: border-color 0.15s ease, transform 0.15s ease;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--border-default);
       cursor: pointer;
     }
-    .art-card:hover {
-      border-color: #8b949e;
-      transform: translateY(-2px);
-    }
-    .art-card-media {
+    .primary-img-wrapper img {
       width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: cover;
+      aspect-ratio: 1/1;
+      object-fit: contain;
       display: block;
-      background: #010409;
-      border-bottom: 1px solid var(--border-default);
     }
-    .art-card-details { padding: 12px; }
-    .art-card-title {
-      font-size: 14px;
-      font-weight: 600;
+    .artwork-summary {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--bg-surface);
+    }
+    .summary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .file-title {
+      font-size: 18px;
+      font-weight: 700;
       margin: 0 0 6px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: var(--accent);
+      color: var(--text-main);
     }
-    .art-card-meta {
-      font-size: 12px;
+    .badge-head {
+      background: rgba(35, 134, 54, 0.2);
+      border: 1px solid var(--border-default);
+      color: #3fb950;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .summary-meta {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
       color: var(--text-muted);
+    }
+    .summary-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .history-drawer-toggle {
+      width: 100%;
+      background: var(--bg-subtle);
+      border: none;
+      padding: 10px 16px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .badge-ext {
-      text-transform: uppercase;
-      font-size: 10px;
-      font-weight: 700;
-      background: var(--border-default);
+    .history-drawer-toggle:hover {
       color: var(--text-main);
-      padding: 2px 6px;
-      border-radius: 4px;
+      background: #282e36;
     }
 
-    .files-table {
-      width: 100%;
-      border: 1px solid var(--border-default);
-      border-top: none;
-      border-collapse: collapse;
-      background: var(--bg-surface);
-      border-radius: 0 0 6px 6px;
-      overflow: hidden;
+    .history-list {
+      display: none;
+      background: #0d1117;
+      border-top: 1px solid var(--border-default);
+      padding: 12px 16px;
     }
-    .files-table tr { border-bottom: 1px solid var(--border-muted); }
-    .files-table tr:last-child { border-bottom: none; }
-    .files-table tr:hover { background: rgba(255,255,255,0.02); }
-    .files-table td { padding: 10px 16px; font-size: 13px; }
-    .file-name-cell { display: flex; align-items: center; gap: 10px; }
+    .history-list.open {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .history-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .history-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .history-thumb {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border-default);
+      background: #000;
+      cursor: pointer;
+    }
+    .history-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .history-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .history-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .btn-action {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-default);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:hover { background: #30363d; }
+    .btn-diff {
+      background: #1f6feb;
+      border: 1px solid rgba(240,246,252,0.1);
+      color: #fff;
+    }
+    .btn-diff:hover { background: #388bfd; }
 
     .commits-container {
       border: 1px solid var(--border-default);
@@ -328,15 +385,16 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
       border-radius: 8px;
-      max-width: 90vw;
-      max-height: 90vh;
+      max-width: 95vw;
+      width: 1080px;
+      max-height: 92vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
       box-shadow: 0 16px 32px rgba(0,0,0,0.5);
     }
     .modal-header {
-      padding: 12px 16px;
+      padding: 12px 20px;
       border-bottom: 1px solid var(--border-default);
       display: flex;
       justify-content: space-between;
@@ -351,6 +409,7 @@
       font-size: 20px;
       cursor: pointer;
     }
+    .modal-close:hover { color: var(--text-main); }
     .modal-body {
       background: #010409;
       display: flex;
@@ -358,15 +417,11 @@
       justify-content: center;
       padding: 20px;
       overflow: auto;
-    }
-    .modal-body img {
-      max-width: 100%;
-      max-height: 70vh;
-      object-fit: contain;
-      border-radius: 4px;
+      min-height: 480px;
+      position: relative;
     }
     .modal-footer {
-      padding: 12px 16px;
+      padding: 12px 20px;
       border-top: 1px solid var(--border-default);
       font-size: 12px;
       color: var(--text-muted);
@@ -375,20 +430,131 @@
       align-items: center;
       background: var(--bg-surface);
     }
-    .btn-action {
+
+    .diff-mode-bar {
+      display: flex;
+      gap: 8px;
+      padding: 10px 20px;
       background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-default);
+    }
+    .btn-diff-mode {
+      background: transparent;
       border: 1px solid var(--border-default);
-      color: var(--text-main);
+      color: var(--text-muted);
       padding: 4px 12px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
+    .btn-diff-mode.active {
+      background: var(--border-default);
+      color: var(--text-main);
+      border-color: #8b949e;
+    }
+
+    .diff-stage {
+      position: relative;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .diff-stage img {
+      max-width: 100%;
+      max-height: 60vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .swipe-container {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .swipe-img-base {
+      display: block;
+      max-height: 60vh;
+      max-width: 100%;
+    }
+    .swipe-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 50%;
+      overflow: hidden;
+      border-right: 2px solid #58a6ff;
+    }
+    .swipe-img-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      max-height: 60vh;
+      max-width: none;
+    }
+
+    .onion-container {
+      position: relative;
+      display: inline-block;
+    }
+    .onion-img-before {
+      display: block;
+      max-height: 60vh;
+      max-width: 100%;
+    }
+    .onion-img-after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .side-by-side-container {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .diff-box {
+      flex: 1;
+      text-align: center;
+      background: #090d13;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border-default);
+    }
+    .diff-box img {
+      max-width: 100%;
+      max-height: 50vh;
+      object-fit: contain;
+      margin-top: 8px;
+    }
+
+    .diff-ctrl-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .diff-slider {
+      width: 280px;
+      cursor: pointer;
+    }
 
     @media (max-width: 860px) {
       .container { grid-template-columns: 1fr; }
+      .artwork-primary-preview { grid-template-columns: 1fr; }
+      .primary-img-wrapper { border-right: none; border-bottom: 1px solid var(--border-default); }
       .sidebar { border-top: 1px solid var(--border-default); padding-top: 24px; }
+      .side-by-side-container { flex-direction: column; }
     }
   </style>
 </head>
@@ -412,9 +578,7 @@
         <svg height="16" viewBox="0 0 16 16" width="16" fill="var(--text-muted)"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path></svg>
         <span id="repo-owner" style="font-weight:600;">ahmad</span>
         <span style="color:var(--text-muted)">/</span>
-        <select id="repo-select" class="project-selector" onchange="onRepoChanged(this.value)">
-          <option value="WisdomPark">WisdomPark</option>
-        </select>
+        <select id="repo-select" class="project-selector" onchange="onRepoChanged(this.value)"></select>
         <span class="badge-visibility">Public</span>
       </div>
       <div>
@@ -425,7 +589,7 @@
     <div class="repo-tabs">
       <div class="tab-item active" id="tab-btn-gallery" onclick="switchViewTab('gallery')">
         <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M1.75 2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25V2.75a.25.25 0 00-.25-.25H1.75zM0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0114.25 15H1.75A1.75 1.75 0 010 13.25V2.75zm3.5 3.75a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm-.25 6.5l3.25-4.333 2.5 3 3.5-4.667 2.25 3H3.25z"></path></svg>
-        Artwork <span class="count-pill" id="asset-count-badge">0</span>
+        Canvases <span class="count-pill" id="asset-count-badge">0</span>
       </div>
       <div class="tab-item" id="tab-btn-commits" onclick="switchViewTab('commits')">
         <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M10.5 7.75a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm1.43.75a4.002 4.002 0 01-7.86 0H.75a.75.75 0 110-1.5h3.32a4.002 4.002 0 017.86 0h3.32a.75.75 0 110 1.5h-3.32z"></path></svg>
@@ -438,17 +602,6 @@
     <div class="main-column">
 
       <div id="gallery-pane">
-        <div class="view-toolbar">
-          <div class="branch-selector">
-            <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25z"></path></svg>
-            main
-          </div>
-          <div class="toolbar-right">
-            <button class="btn-toggle active" id="btn-grid" onclick="setDisplayLayout('grid')">Cards</button>
-            <button class="btn-toggle" id="btn-table" onclick="setDisplayLayout('table')">File Tree</button>
-          </div>
-        </div>
-
         <div class="commit-banner">
           <div class="commit-author-section">
             <div class="avatar-sm" id="avatar-initial">A</div>
@@ -458,11 +611,7 @@
           <div class="commit-hash" id="latest-commit-hash">latest</div>
         </div>
 
-        <table class="files-table" id="files-table-view" style="display: none;">
-          <tbody id="files-table-body"></tbody>
-        </table>
-
-        <div class="art-grid" id="art-grid-view"></div>
+        <div id="canvases-view"></div>
       </div>
 
       <div id="commits-pane" style="display: none;">
@@ -491,7 +640,7 @@
             <span class="stat-value" id="storage-footprint">0.00 MB</span>
           </div>
           <div class="stat-entry">
-            <span class="stat-label">Tracked Files</span>
+            <span class="stat-label">Unique Canvases</span>
             <span class="stat-value" id="tracked-files-count">0</span>
           </div>
         </div>
@@ -527,8 +676,37 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="diff-modal" onclick="closeDiffModal(event)">
+    <div class="modal-window" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="modal-title" id="diff-modal-title">Visual Diff</span>
+          <div style="font-size:12px; color:var(--text-muted);" id="diff-modal-subtitle">Comparing prior revision with HEAD</div>
+        </div>
+        <button class="modal-close" onclick="closeDiffModal()">&times;</button>
+      </div>
+      
+      <div class="diff-mode-bar">
+        <button class="btn-diff-mode active" id="btn-mode-swipe" onclick="setDiffMode('swipe')">Swipe Split</button>
+        <button class="btn-diff-mode" id="btn-mode-onion" onclick="setDiffMode('onion')">Onion Skin</button>
+        <button class="btn-diff-mode" id="btn-mode-diff" onclick="setDiffMode('diff')">Difference Blend</button>
+        <button class="btn-diff-mode" id="btn-mode-side" onclick="setDiffMode('side')">Side-by-Side</button>
+      </div>
+
+      <div class="modal-body" id="diff-modal-stage"></div>
+
+      <div class="modal-footer">
+        <div id="diff-slider-container" class="diff-ctrl-row">
+          <span id="slider-left-label" style="font-weight:600;">Older</span>
+          <input type="range" min="0" max="100" value="50" class="diff-slider" id="diff-range-input" oninput="onDiffSliderChange(this.value)">
+          <span id="slider-right-label" style="font-weight:600; color:#3fb950;">Current HEAD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    const DEFAULT_SERVER_URL = "https://exceptions-pope-details-witch.trycloudflare.com";
+    const DEFAULT_SERVER_URL = "https://continues-cohen-always-barriers.trycloudflare.com";
     
     const urlParams = new URLSearchParams(window.location.search);
     const currentUser = urlParams.get('user') || "ahmad";
@@ -539,8 +717,14 @@
       serverUrl = urlParams.get('daemon').replace(/\/+$/, "");
       localStorage.setItem("gitimg_daemon_url", serverUrl);
     }
+
     let repoAssets = [];
     let repoCommits = [];
+    let groupedCanvases = {};
+
+    let activeDiffBefore = null;
+    let activeDiffAfter = null;
+    let activeDiffMode = 'swipe';
 
     document.getElementById("repo-owner").innerText = currentUser;
     document.getElementById("avatar-initial").innerText = currentUser.charAt(0).toUpperCase();
@@ -590,25 +774,6 @@
       }
     }
 
-    function setDisplayLayout(mode) {
-      const grid = document.getElementById("art-grid-view");
-      const table = document.getElementById("files-table-view");
-      const btnGrid = document.getElementById("btn-grid");
-      const btnTable = document.getElementById("btn-table");
-
-      if (mode === 'grid') {
-        grid.style.display = "grid";
-        table.style.display = "none";
-        btnGrid.classList.add("active");
-        btnTable.classList.remove("active");
-      } else {
-        grid.style.display = "none";
-        table.style.display = "table";
-        btnGrid.classList.remove("active");
-        btnTable.classList.add("active");
-      }
-    }
-
     async function loadUserRepositories() {
       try {
         const res = await fetch(`${serverUrl}/api/repos/${currentUser}`);
@@ -651,12 +816,12 @@
         statusPill.classList.remove("offline");
         statusText.innerText = "Online";
 
-        renderAssets(repoAssets);
+        processAndRenderCanvases(repoAssets);
       } catch (err) {
         statusPill.classList.add("offline");
         statusText.innerText = "Offline";
-        document.getElementById("art-grid-view").innerHTML = `
-          <div style="grid-column: 1/-1; padding: 48px 0; text-align: center; color: var(--text-muted);">
+        document.getElementById("canvases-view").innerHTML = `
+          <div style="padding: 48px 0; text-align: center; color: var(--text-muted);">
             <p>Workstation daemon offline at <code>${serverUrl}</code></p>
             <button class="btn-action" style="margin: 0 auto;" onclick="changeServerUrl()">Change Endpoint URL</button>
           </div>
@@ -696,70 +861,206 @@
       } catch (e) {}
     }
 
-    function renderAssets(assets) {
-      const grid = document.getElementById("art-grid-view");
-      const tableBody = document.getElementById("files-table-body");
+    function processAndRenderCanvases(assets) {
+      const container = document.getElementById("canvases-view");
       const countBadge = document.getElementById("asset-count-badge");
       const trackedCount = document.getElementById("tracked-files-count");
       const footprint = document.getElementById("storage-footprint");
 
-      countBadge.innerText = assets.length;
-      trackedCount.innerText = assets.length;
-
-      let totalBytes = 0;
-
       if (assets.length === 0) {
-        grid.innerHTML = `<p style="grid-column:1/-1; color:var(--text-muted); text-align:center; padding:48px 0;">No artwork committed to this repository yet.</p>`;
-        tableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:24px;">No files committed.</td></tr>`;
+        container.innerHTML = `<p style="color:var(--text-muted); text-align:center; padding:48px 0;">No artwork committed to this project yet.</p>`;
+        countBadge.innerText = 0;
+        trackedCount.innerText = 0;
+        footprint.innerText = "0.00 MB";
         return;
       }
 
-      grid.innerHTML = assets.map((item, idx) => {
+      groupedCanvases = {};
+      let totalBytes = 0;
+
+      assets.forEach(item => {
         totalBytes += item.size;
-        const ext = item.file.split('.').pop();
+        if (!groupedCanvases[item.file]) {
+          groupedCanvases[item.file] = [];
+        }
+        groupedCanvases[item.file].push(item);
+      });
+
+      const uniqueNames = Object.keys(groupedCanvases);
+      countBadge.innerText = uniqueNames.length;
+      trackedCount.innerText = uniqueNames.length;
+      footprint.innerText = (totalBytes / (1024 * 1024)).toFixed(2) + " MB";
+
+      container.innerHTML = uniqueNames.map((fname, fileIdx) => {
+        const versions = groupedCanvases[fname];
+        const head = versions[versions.length - 1];
+        const previousRevisions = versions.slice(0, versions.length - 1).reverse();
+        const vCount = versions.length;
+
         return `
-          <div class="art-card" onclick="openModal(${idx})">
-            <img class="art-card-media" src="${serverUrl}${item.thumb_url}" alt="${item.file}" loading="lazy">
-            <div class="art-card-details">
-              <div class="art-card-title">${item.file}</div>
-              <div class="art-card-meta">
-                <span>${(item.size / 1024).toFixed(1)} KB</span>
-                <span class="badge-ext">${ext}</span>
+          <div class="artwork-group-card">
+            <div class="artwork-primary-preview">
+              <div class="primary-img-wrapper" onclick="openDirectModal('${head.raw_url}', '${head.file}', '${head.manifest}', ${head.size})">
+                <img src="${serverUrl}${head.thumb_url}" alt="${head.file}">
+              </div>
+              <div class="artwork-summary">
+                <div>
+                  <div class="summary-header">
+                    <h2 class="file-title">${head.file}</h2>
+                    <span class="badge-head">HEAD · v${vCount}</span>
+                  </div>
+                  <div class="summary-meta">
+                    <div><strong>Last modified:</strong> ${new Date(head.time * 1000).toLocaleString()}</div>
+                    <div><strong>Payload size:</strong> ${(head.size / 1024).toFixed(1)} KB</div>
+                    <div><strong>Manifest:</strong> <code style="font-family:var(--font-mono);">${head.manifest.substring(0, 10)}...</code></div>
+                    <div><strong>Revision count:</strong> ${vCount} total state${vCount > 1 ? 's' : ''} recorded</div>
+                  </div>
+                </div>
+                <div class="summary-actions">
+                  <a href="${serverUrl}${head.raw_url}" target="_blank" class="btn-action">Open Original</a>
+                  ${previousRevisions.length > 0 ? `
+                    <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${versions.length - 2}, ${versions.length - 1})">
+                      Diff with Prior (v${vCount - 1})
+                    </button>
+                  ` : ''}
+                </div>
               </div>
             </div>
+
+            ${previousRevisions.length > 0 ? `
+              <button class="history-drawer-toggle" onclick="toggleHistoryDrawer('${fileIdx}')">
+                <span>View prior revisions (${previousRevisions.length})</span>
+                <span id="drawer-arrow-${fileIdx}">▼</span>
+              </button>
+              <div class="history-list" id="history-list-${fileIdx}">
+                ${previousRevisions.map((rev, revRevIdx) => {
+                  const actualRevIndex = previousRevisions.length - 1 - revRevIdx;
+                  return `
+                    <div class="history-item">
+                      <div class="history-item-left">
+                        <img class="history-thumb" src="${serverUrl}${rev.thumb_url}" alt="v${actualRevIndex + 1}" onclick="openDirectModal('${rev.raw_url}', '${rev.file}', '${rev.manifest}', ${rev.size})">
+                        <div class="history-details">
+                          <div class="history-title">Revision v${actualRevIndex + 1}</div>
+                          <div class="history-sub">${new Date(rev.time * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} · ${(rev.size / 1024).toFixed(1)} KB · ${rev.manifest.substring(0, 7)}</div>
+                        </div>
+                      </div>
+                      <div style="display:flex; gap:8px;">
+                        <button class="btn-action" onclick="openDirectModal('${rev.raw_url}', '${rev.file} (v${actualRevIndex + 1})', '${rev.manifest}', ${rev.size})">Inspect</button>
+                        <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${actualRevIndex}, ${versions.length - 1})">Compare vs HEAD</button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
           </div>
         `;
       }).join('');
+    }
 
-      tableBody.innerHTML = assets.map((item, idx) => {
-        return `
-          <tr>
-            <td class="file-name-cell">
-              <svg height="16" viewBox="0 0 16 16" width="16" fill="var(--text-muted)"><path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0113.25 16h-9.5A1.75 1.75 0 012 14.25V1.75zM3.75 1.5a.25.25 0 00-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 00.25-.25V6h-2.75A1.75 1.75 0 019 4.25V1.5H3.75z"></path></svg>
-              <a href="javascript:void(0)" onclick="openModal(${idx})">${item.file}</a>
-            </td>
-            <td style="color:var(--text-muted); font-size:12px; text-align:right;">${(item.size / 1024).toFixed(1)} KB</td>
-            <td style="color:var(--text-muted); font-size:12px; text-align:right;">${new Date(item.time * 1000).toLocaleDateString()}</td>
-          </tr>
-        `;
-      }).join('');
-
-      footprint.innerText = (totalBytes / (1024 * 1024)).toFixed(2) + " MB";
-      if (assets.length > 0) {
-        document.getElementById("latest-commit-hash").innerText = assets[0].manifest.substring(0, 7);
+    function toggleHistoryDrawer(idx) {
+      const list = document.getElementById(`history-list-${idx}`);
+      const arrow = document.getElementById(`drawer-arrow-${idx}`);
+      if (list.classList.contains("open")) {
+        list.classList.remove("open");
+        arrow.innerText = "▼";
+      } else {
+        list.classList.add("open");
+        arrow.innerText = "▲";
       }
     }
 
-    function openModal(index) {
-      const asset = repoAssets[index];
-      if (!asset) return;
+    function initiateDiff(fileName, beforeIdx, afterIdx) {
+      const versions = groupedCanvases[fileName];
+      activeDiffBefore = versions[beforeIdx];
+      activeDiffAfter = versions[afterIdx];
 
-      document.getElementById("modal-filename").innerText = asset.file;
-      document.getElementById("modal-image").src = `${serverUrl}${asset.raw_url}`;
-      document.getElementById("modal-manifest").innerText = asset.manifest;
-      document.getElementById("modal-filesize").innerText = `${(asset.size / 1024).toFixed(1)} KB`;
-      document.getElementById("modal-raw-link").href = `${serverUrl}${asset.raw_url}`;
+      document.getElementById("diff-modal-title").innerText = `Visual Diff: ${fileName}`;
+      document.getElementById("diff-modal-subtitle").innerText = `Comparing v${beforeIdx + 1} (${activeDiffBefore.manifest.substring(0, 7)}) against v${afterIdx + 1} (${activeDiffAfter.manifest.substring(0, 7)})`;
+      document.getElementById("slider-left-label").innerText = `v${beforeIdx + 1} (${(activeDiffBefore.size / 1024).toFixed(1)} KB)`;
+      document.getElementById("slider-right-label").innerText = `v${afterIdx + 1} (${(activeDiffAfter.size / 1024).toFixed(1)} KB)`;
 
+      document.getElementById("diff-range-input").value = 50;
+      setDiffMode('swipe');
+      document.getElementById("diff-modal").style.display = "flex";
+    }
+
+    function setDiffMode(mode) {
+      activeDiffMode = mode;
+      document.querySelectorAll('.btn-diff-mode').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-mode-${mode}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const stage = document.getElementById("diff-modal-stage");
+      const sliderContainer = document.getElementById("diff-slider-container");
+      const urlBefore = `${serverUrl}${activeDiffBefore.raw_url}`;
+      const urlAfter = `${serverUrl}${activeDiffAfter.raw_url}`;
+
+      if (mode === 'swipe') {
+        sliderContainer.style.display = "flex";
+        stage.innerHTML = `
+          <div class="swipe-container" id="swipe-box">
+            <img src="${urlAfter}" class="swipe-img-base" id="swipe-base">
+            <div class="swipe-overlay" id="swipe-mask" style="width: 50%;">
+              <img src="${urlBefore}" class="swipe-img-overlay" id="swipe-top">
+            </div>
+          </div>
+        `;
+        const baseImg = document.getElementById("swipe-base");
+        const topImg = document.getElementById("swipe-top");
+        baseImg.onload = () => {
+          topImg.style.width = `${baseImg.clientWidth}px`;
+          topImg.style.height = `${baseImg.clientHeight}px`;
+        };
+      } else if (mode === 'onion') {
+        sliderContainer.style.display = "flex";
+        stage.innerHTML = `
+          <div class="onion-container">
+            <img src="${urlBefore}" class="onion-img-before">
+            <img src="${urlAfter}" class="onion-img-after" id="onion-top" style="opacity: 0.5;">
+          </div>
+        `;
+      } else if (mode === 'diff') {
+        sliderContainer.style.display = "none";
+        stage.innerHTML = `
+          <div class="onion-container">
+            <img src="${urlBefore}" class="onion-img-before">
+            <img src="${urlAfter}" class="onion-img-after" style="mix-blend-mode: difference; filter: contrast(200%);">
+          </div>
+        `;
+      } else if (mode === 'side') {
+        sliderContainer.style.display = "none";
+        stage.innerHTML = `
+          <div class="side-by-side-container">
+            <div class="diff-box">
+              <span style="font-weight:600; font-size:12px; color:var(--text-muted);">BEFORE (v${activeDiffBefore.manifest.substring(0,7)})</span>
+              <img src="${urlBefore}">
+            </div>
+            <div class="diff-box">
+              <span style="font-weight:600; font-size:12px; color:#3fb950;">AFTER (v${activeDiffAfter.manifest.substring(0,7)})</span>
+              <img src="${urlAfter}">
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function onDiffSliderChange(val) {
+      if (activeDiffMode === 'swipe') {
+        const mask = document.getElementById("swipe-mask");
+        if (mask) mask.style.width = `${val}%`;
+      } else if (activeDiffMode === 'onion') {
+        const top = document.getElementById("onion-top");
+        if (top) top.style.opacity = (val / 100).toString();
+      }
+    }
+
+    function openDirectModal(rawUrl, name, manifest, size) {
+      document.getElementById("modal-filename").innerText = name;
+      document.getElementById("modal-image").src = `${serverUrl}${rawUrl}`;
+      document.getElementById("modal-manifest").innerText = manifest;
+      document.getElementById("modal-filesize").innerText = `${(size / 1024).toFixed(1)} KB`;
+      document.getElementById("modal-raw-link").href = `${serverUrl}${rawUrl}`;
       document.getElementById("asset-modal").style.display = "flex";
     }
 
@@ -768,8 +1069,16 @@
       document.getElementById("modal-image").src = "";
     }
 
+    function closeDiffModal() {
+      document.getElementById("diff-modal").style.display = "none";
+      document.getElementById("diff-modal-stage").innerHTML = "";
+    }
+
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeModal();
+      if (e.key === "Escape") {
+        closeModal();
+        closeDiffModal();
+      }
     });
 
     loadUserRepositories();
