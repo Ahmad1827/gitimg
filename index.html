@@ -16,6 +16,9 @@
       --text-muted: #848d97;
       --accent: #2f81f7;
       --accent-hover: #58a6ff;
+      --success: #238636;
+      --success-hover: #2ea043;
+      --danger: #da3633;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     }
@@ -44,6 +47,7 @@
       gap: 16px;
     }
     .gh-navbar-left { display: flex; align-items: center; gap: 16px; }
+    .gh-navbar-right { display: flex; align-items: center; gap: 10px; }
     .gh-logo {
       color: #fff;
       font-weight: 700;
@@ -307,7 +311,7 @@
       background: var(--bg-subtle);
       border: 1px solid var(--border-default);
       color: var(--text-main);
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 6px;
       font-size: 12px;
       font-weight: 600;
@@ -317,6 +321,12 @@
       gap: 6px;
     }
     .btn-action:hover { background: #30363d; }
+    .btn-primary {
+      background: var(--success);
+      border-color: rgba(240,246,252,0.1);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--success-hover); }
     .btn-diff {
       background: #1f6feb;
       border: 1px solid rgba(240,246,252,0.1);
@@ -431,6 +441,76 @@
       background: var(--bg-surface);
     }
 
+    .auth-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      width: 360px;
+      padding: 24px;
+      box-shadow: 0 16px 32px rgba(0,0,0,0.5);
+      position: relative;
+    }
+    .auth-title {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin: 0 0 16px 0;
+    }
+    .auth-form-group {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .auth-form-group label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+    .auth-input {
+      background: var(--bg-page);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+    .auth-input:focus {
+      border-color: var(--accent);
+    }
+    .auth-btn-submit {
+      width: 100%;
+      background: var(--success);
+      color: #fff;
+      border: 1px solid rgba(240,246,252,0.1);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+    .auth-btn-submit:hover { background: var(--success-hover); }
+    .auth-error-box {
+      background: rgba(218,54,51,0.15);
+      border: 1px solid rgba(218,54,51,0.4);
+      color: #f85149;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .auth-footer {
+      margin-top: 16px;
+      padding: 12px;
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      text-align: center;
+      font-size: 13px;
+    }
+
     .diff-mode-bar {
       display: flex;
       gap: 8px;
@@ -452,20 +532,6 @@
       background: var(--border-default);
       color: var(--text-main);
       border-color: #8b949e;
-    }
-
-    .diff-stage {
-      position: relative;
-      max-width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .diff-stage img {
-      max-width: 100%;
-      max-height: 60vh;
-      object-fit: contain;
-      display: block;
     }
 
     .swipe-container {
@@ -570,6 +636,7 @@
         <a href="?">Projects</a>
       </div>
     </div>
+    <div class="gh-navbar-right" id="nav-auth-container"></div>
   </header>
 
   <div class="repo-header">
@@ -705,11 +772,45 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="auth-modal" onclick="closeAuthModal(event)">
+    <div class="auth-card" onclick="event.stopPropagation()">
+      <div style="text-align:center; margin-bottom:12px;">
+        <svg height="36" viewBox="0 0 16 16" width="36" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+      </div>
+      <h2 class="auth-title" id="auth-modal-header">Sign in to GitImg</h2>
+      <div class="auth-error-box" id="auth-error-banner"></div>
+
+      <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+        <div class="auth-form-group">
+          <label for="auth-username">Username</label>
+          <input type="text" id="auth-username" class="auth-input" required autocomplete="username">
+        </div>
+
+        <div class="auth-form-group" id="auth-email-group" style="display: none;">
+          <label for="auth-email">Email address</label>
+          <input type="email" id="auth-email" class="auth-input" autocomplete="email">
+        </div>
+
+        <div class="auth-form-group">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" class="auth-input" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="auth-btn-submit" id="auth-submit-btn">Sign in</button>
+      </form>
+
+      <div class="auth-footer" id="auth-switch-prompt">
+        <span>New to GitImg? </span>
+        <a href="javascript:void(0)" onclick="switchAuthMode('signup')">Create an account</a>.
+      </div>
+    </div>
+  </div>
+
   <script>
     const DEFAULT_SERVER_URL = "https://continues-cohen-always-barriers.trycloudflare.com";
     
     const urlParams = new URLSearchParams(window.location.search);
-    const currentUser = urlParams.get('user') || "ahmad";
+    let currentUser = localStorage.getItem("gitimg_auth_user") || urlParams.get('user') || "ahmad";
     let currentRepo = urlParams.get('repo') || "WisdomPark";
 
     let serverUrl = localStorage.getItem("gitimg_daemon_url") || DEFAULT_SERVER_URL;
@@ -725,11 +826,130 @@
     let activeDiffBefore = null;
     let activeDiffAfter = null;
     let activeDiffMode = 'swipe';
+    let currentAuthMode = 'login';
 
     document.getElementById("repo-owner").innerText = currentUser;
     document.getElementById("avatar-initial").innerText = currentUser.charAt(0).toUpperCase();
     document.getElementById("commit-author").innerText = currentUser;
     document.getElementById("active-tunnel-url").innerText = serverUrl;
+
+    function renderNavAuth() {
+      const navContainer = document.getElementById("nav-auth-container");
+      const token = localStorage.getItem("gitimg_auth_token");
+      const user = localStorage.getItem("gitimg_auth_user");
+
+      if (token && user) {
+        navContainer.innerHTML = `
+          <span style="font-weight:600; display:flex; align-items:center; gap:6px;">
+            <span class="avatar-sm" style="width:20px; height:20px; font-size:10px;">${user.charAt(0).toUpperCase()}</span>
+            ${user}
+          </span>
+          <button class="btn-action" onclick="logoutUser()">Sign out</button>
+        `;
+      } else {
+        navContainer.innerHTML = `
+          <button class="btn-action" onclick="openAuthModal('login')">Sign in</button>
+          <button class="btn-action btn-primary" onclick="openAuthModal('signup')">Sign up</button>
+        `;
+      }
+    }
+
+    function openAuthModal(mode) {
+      currentAuthMode = mode;
+      const modal = document.getElementById("auth-modal");
+      const header = document.getElementById("auth-modal-header");
+      const emailGroup = document.getElementById("auth-email-group");
+      const emailInput = document.getElementById("auth-email");
+      const submitBtn = document.getElementById("auth-submit-btn");
+      const footer = document.getElementById("auth-switch-prompt");
+      const errorBox = document.getElementById("auth-error-banner");
+
+      errorBox.style.display = "none";
+      errorBox.innerText = "";
+
+      if (mode === 'signup') {
+        header.innerText = "Create your account";
+        emailGroup.style.display = "flex";
+        emailInput.required = true;
+        submitBtn.innerText = "Create account";
+        footer.innerHTML = `Already have an account? <a href="javascript:void(0)" onclick="switchAuthMode('login')">Sign in</a>.`;
+      } else {
+        header.innerText = "Sign in to GitImg";
+        emailGroup.style.display = "none";
+        emailInput.required = false;
+        submitBtn.innerText = "Sign in";
+        footer.innerHTML = `New to GitImg? <a href="javascript:void(0)" onclick="switchAuthMode('signup')">Create an account</a>.`;
+      }
+
+      modal.style.display = "flex";
+    }
+
+    function switchAuthMode(mode) {
+      openAuthModal(mode);
+    }
+
+    function closeAuthModal(event) {
+      document.getElementById("auth-modal").style.display = "none";
+    }
+
+    async function handleAuthSubmit(e) {
+      e.preventDefault();
+      const username = document.getElementById("auth-username").value.trim();
+      const password = document.getElementById("auth-password").value;
+      const email = document.getElementById("auth-email").value.trim();
+      const errorBox = document.getElementById("auth-error-banner");
+
+      errorBox.style.display = "none";
+
+      try {
+        if (currentAuthMode === 'signup') {
+          const res = await fetch(`${serverUrl}/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, email, password })
+          });
+          const data = await res.json();
+          if (!res.ok || data.error) {
+            throw new Error(data.error || "Failed to register account.");
+          }
+          openAuthModal('login');
+          errorBox.style.display = "block";
+          errorBox.style.borderColor = "rgba(46,160,67,0.4)";
+          errorBox.style.background = "rgba(46,160,67,0.15)";
+          errorBox.style.color = "#3fb950";
+          errorBox.innerText = "Account created. Please sign in.";
+        } else {
+          const res = await fetch(`${serverUrl}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          if (!res.ok || !data.token) {
+            throw new Error(data.error || "Invalid username or password.");
+          }
+
+          localStorage.setItem("gitimg_auth_token", data.token);
+          localStorage.setItem("gitimg_auth_user", username);
+          
+          const url = new URL(window.location);
+          url.searchParams.set('user', username);
+          window.location.href = url.toString();
+        }
+      } catch (err) {
+        errorBox.style.display = "block";
+        errorBox.style.borderColor = "rgba(218,54,51,0.4)";
+        errorBox.style.background = "rgba(218,54,51,0.15)";
+        errorBox.style.color = "#f85149";
+        errorBox.innerText = err.message;
+      }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem("gitimg_auth_token");
+      localStorage.removeItem("gitimg_auth_user");
+      location.reload();
+    }
 
     function changeServerUrl() {
       const current = localStorage.getItem("gitimg_daemon_url") || DEFAULT_SERVER_URL;
@@ -1078,9 +1298,11 @@
       if (e.key === "Escape") {
         closeModal();
         closeDiffModal();
+        closeAuthModal();
       }
     });
 
+    renderNavAuth();
     loadUserRepositories();
     fetchAssets();
     fetchCommits();
