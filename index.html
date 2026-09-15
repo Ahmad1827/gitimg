@@ -535,6 +535,10 @@
     let currentRepo = urlParams.get('repo') || "WisdomPark";
 
     let serverUrl = localStorage.getItem("gitimg_daemon_url") || DEFAULT_SERVER_URL;
+    if (urlParams.get('daemon')) {
+      serverUrl = urlParams.get('daemon').replace(/\/+$/, "");
+      localStorage.setItem("gitimg_daemon_url", serverUrl);
+    }
     let repoAssets = [];
     let repoCommits = [];
 
