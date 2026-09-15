@@ -100,38 +100,56 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
 
-    /* Home View Elements */
+    /* Home Layout */
     .home-container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 32px auto;
       padding: 0 24px;
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 1fr 340px;
       gap: 32px;
     }
-    .home-profile-card {
+
+    .featured-creator-box {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
       border-radius: 8px;
-      padding: 24px;
-      text-align: center;
+      padding: 32px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 24px;
+      align-items: center;
     }
-    .avatar-lg {
-      width: 80px;
-      height: 80px;
+    .avatar-hero {
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       background: #58a6ff;
       color: #0d1117;
-      font-size: 36px;
+      font-size: 48px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 16px auto;
+      flex-shrink: 0;
+      border: 2px solid var(--border-default);
     }
+    .featured-creator-info { flex: 1; }
+    .featured-title { font-size: 26px; font-weight: 700; margin: 0 0 6px 0; }
+    .badge-creator {
+      background: rgba(47, 129, 247, 0.15);
+      border: 1px solid rgba(47, 129, 247, 0.4);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
     .repo-card-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
       margin-top: 16px;
     }
@@ -143,18 +161,70 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 120px;
+      min-height: 110px;
+      transition: border-color 0.15s;
     }
     .repo-card:hover { border-color: #8b949e; }
     .repo-card-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Repo Workspace View Elements */
+    /* Accounts Sidebar on Right */
+    .accounts-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .accounts-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border-default);
+      padding-bottom: 12px;
+    }
+    .accounts-panel-header h3 { margin: 0; font-size: 16px; }
+    .account-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-muted);
+    }
+    .account-item:last-child { border-bottom: none; }
+    .account-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar-sm {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #58a6ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0d1117;
+    }
+    .empty-account-box {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      background: var(--bg-page);
+      border-radius: 6px;
+      border: 1px dashed var(--border-default);
+    }
+
+    /* Workspace Elements */
     .repo-header {
       background-color: var(--bg-surface);
       border-bottom: 1px solid var(--border-default);
@@ -246,18 +316,6 @@
       margin-bottom: 20px;
     }
     .commit-author-section { display: flex; align-items: center; gap: 8px; }
-    .avatar-sm {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #58a6ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: #0d1117;
-    }
     .commit-msg { color: var(--text-main); font-weight: 500; }
     .commit-hash { font-family: var(--font-mono); color: var(--text-muted); font-size: 12px; }
 
@@ -446,6 +504,7 @@
       background: currentColor;
     }
 
+    /* Modals */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -485,7 +544,6 @@
       font-size: 20px;
       cursor: pointer;
     }
-    .modal-close:hover { color: var(--text-main); }
     .modal-body {
       background: #010409;
       display: flex;
@@ -507,6 +565,7 @@
       background: var(--bg-surface);
     }
 
+    /* Auth Modal */
     .auth-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
@@ -516,23 +575,9 @@
       box-shadow: 0 16px 32px rgba(0,0,0,0.5);
       position: relative;
     }
-    .auth-title {
-      font-size: 20px;
-      font-weight: 600;
-      text-align: center;
-      margin: 0 0 16px 0;
-    }
-    .auth-form-group {
-      margin-bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .auth-form-group label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-main);
-    }
+    .auth-title { font-size: 20px; font-weight: 600; text-align: center; margin: 0 0 16px 0; }
+    .auth-form-group { margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px; }
+    .auth-form-group label { font-size: 13px; font-weight: 500; color: var(--text-main); }
     .auth-input {
       background: var(--bg-page);
       border: 1px solid var(--border-default);
@@ -575,6 +620,7 @@
       font-size: 13px;
     }
 
+    /* Diff View */
     .diff-mode-bar {
       display: flex;
       gap: 8px;
@@ -597,16 +643,8 @@
       color: var(--text-main);
       border-color: #8b949e;
     }
-    .swipe-container {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-    }
-    .swipe-img-base {
-      display: block;
-      max-height: 60vh;
-      max-width: 100%;
-    }
+    .swipe-container { position: relative; overflow: hidden; display: inline-block; }
+    .swipe-img-base { display: block; max-height: 60vh; max-width: 100%; }
     .swipe-overlay {
       position: absolute;
       top: 0;
@@ -616,38 +654,11 @@
       overflow: hidden;
       border-right: 2px solid #58a6ff;
     }
-    .swipe-img-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      max-height: 60vh;
-      max-width: none;
-    }
-    .onion-container {
-      position: relative;
-      display: inline-block;
-    }
-    .onion-img-before {
-      display: block;
-      max-height: 60vh;
-      max-width: 100%;
-    }
-    .onion-img-after {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    .side-by-side-container {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
+    .swipe-img-overlay { position: absolute; top: 0; left: 0; height: 100%; max-height: 60vh; max-width: none; }
+    .onion-container { position: relative; display: inline-block; }
+    .onion-img-before { display: block; max-height: 60vh; max-width: 100%; }
+    .onion-img-after { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+    .side-by-side-container { display: flex; gap: 20px; align-items: center; justify-content: center; width: 100%; }
     .diff-box {
       flex: 1;
       text-align: center;
@@ -656,25 +667,14 @@
       border-radius: 6px;
       border: 1px solid var(--border-default);
     }
-    .diff-box img {
-      max-width: 100%;
-      max-height: 50vh;
-      object-fit: contain;
-      margin-top: 8px;
-    }
-    .diff-ctrl-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      justify-content: center;
-      margin-top: 12px;
-    }
+    .diff-box img { max-width: 100%; max-height: 50vh; object-fit: contain; margin-top: 8px; }
+    .diff-ctrl-row { display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; margin-top: 12px; }
     .diff-slider { width: 280px; cursor: pointer; }
 
-    @media (max-width: 860px) {
-      .container { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
       .home-container { grid-template-columns: 1fr; }
+      .container { grid-template-columns: 1fr; }
+      .featured-creator-box { flex-direction: column; text-align: center; }
       .artwork-primary-preview { grid-template-columns: 1fr; }
       .primary-img-wrapper { border-right: none; border-bottom: 1px solid var(--border-default); }
       .sidebar { border-top: 1px solid var(--border-default); padding-top: 24px; }
@@ -684,7 +684,7 @@
 </head>
 <body>
 
-  <div id="toast" class="toast-banner">Signed in successfully</div>
+  <div id="toast" class="toast-banner">Notification</div>
 
   <header class="gh-navbar">
     <div class="gh-navbar-left">
@@ -699,30 +699,53 @@
     <div class="gh-navbar-right" id="nav-auth-container"></div>
   </header>
 
-  <!-- Dynamic Views -->
+  <!-- HOME VIEW -->
   <div id="home-view" style="display: none;">
     <div class="home-container">
-      <div class="home-profile-card">
-        <div class="avatar-lg" id="home-avatar-initial">A</div>
-        <h2 style="margin:0 0 4px 0;" id="home-username-heading">ahmad</h2>
-        <p style="color:var(--text-muted); margin:0 0 16px 0;">GitImg Creator</p>
-        <button class="btn-action btn-primary" style="width:100%; justify-content:center;" onclick="createNewProjectPrompt()">+ New Artwork Project</button>
-        <div style="margin-top: 24px; text-align: left; border-top: 1px solid var(--border-default); padding-top: 16px;">
-          <div style="font-size:12px; color:var(--text-muted); margin-bottom: 6px;">LOCAL DAEMON</div>
-          <code style="font-size:11px; font-family:var(--font-mono); word-break:break-all;" id="home-daemon-url">--</code>
-          <button class="btn-action" style="width:100%; justify-content:center; margin-top:10px;" onclick="changeServerUrl()">Change Daemon URL</button>
-        </div>
-      </div>
+      
+      <!-- Left: Big Featured Creator Display -->
       <div>
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-default); padding-bottom:12px;">
-          <h2 style="margin:0; font-size:20px;">Repositories &amp; Projects</h2>
-          <span style="color:var(--text-muted);" id="home-repo-count">0 repositories</span>
+        <div class="featured-creator-box" id="featured-box">
+          <!-- Dynamic rendering based on login status -->
         </div>
-        <div class="repo-card-grid" id="home-repo-grid"></div>
+
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-default); padding-bottom:12px;">
+            <h2 style="margin:0; font-size:18px;" id="projects-section-title">Repositories &amp; Canvases</h2>
+            <span style="color:var(--text-muted); font-size:13px;" id="home-repo-count">0 projects</span>
+          </div>
+          <div class="repo-card-grid" id="home-repo-grid"></div>
+        </div>
       </div>
+
+      <!-- Right: All Other Registered Accounts -->
+      <div>
+        <div class="accounts-panel">
+          <div class="accounts-panel-header">
+            <h3>Registered Creators</h3>
+            <span class="status-badge" id="accounts-node-status">
+              <span class="status-dot"></span> <span id="node-status-text">Checking</span>
+            </span>
+          </div>
+          
+          <div id="other-accounts-list">
+            <div style="color:var(--text-muted); font-size:13px; text-align:center; padding:16px 0;">
+              Scanning network daemon...
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-default);">
+            <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px; font-weight:700;">Active Tunnel</div>
+            <code style="font-size:11px; font-family:var(--font-mono); word-break:break-all;" id="home-daemon-url">--</code>
+            <button class="btn-action" style="width:100%; justify-content:center; margin-top:10px;" onclick="changeServerUrl()">Update Endpoint URL</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
+  <!-- REPOSITORY WORKSPACE VIEW -->
   <div id="repo-workspace-view" style="display: none;">
     <div class="repo-header">
       <div class="repo-title-row">
@@ -806,7 +829,7 @@
     </div>
   </div>
 
-  <!-- Asset Modal -->
+  <!-- Asset Inspection Modal -->
   <div class="modal-backdrop" id="asset-modal" onclick="closeModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -827,7 +850,7 @@
     </div>
   </div>
 
-  <!-- Diff Modal -->
+  <!-- Diff Inspection Modal -->
   <div class="modal-backdrop" id="diff-modal" onclick="closeDiffModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -857,7 +880,7 @@
     </div>
   </div>
 
-  <!-- Auth Modal -->
+  <!-- Authentication Modal -->
   <div class="modal-backdrop" id="auth-modal" onclick="closeAuthModal(event)">
     <div class="auth-card" onclick="event.stopPropagation()">
       <div style="text-align:center; margin-bottom:12px;">
@@ -903,7 +926,11 @@
       localStorage.setItem("gitimg_daemon_url", serverUrl);
     }
 
-    let currentUser = localStorage.getItem("gitimg_auth_user") || urlParams.get('user') || "ahmad";
+    const sessionUser = localStorage.getItem("gitimg_auth_user");
+    const sessionToken = localStorage.getItem("gitimg_auth_token");
+    const isLoggedIn = !!(sessionUser && sessionToken);
+
+    let activeViewingUser = urlParams.get('user') || sessionUser || "ahmad";
     let currentRepo = urlParams.get('repo');
 
     let repoAssets = [];
@@ -924,14 +951,11 @@
 
     function renderNavAuth() {
       const navContainer = document.getElementById("nav-auth-container");
-      const token = localStorage.getItem("gitimg_auth_token");
-      const user = localStorage.getItem("gitimg_auth_user");
-
-      if (token && user) {
+      if (isLoggedIn) {
         navContainer.innerHTML = `
-          <span style="font-weight:600; display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="goHome()">
-            <span class="avatar-sm" style="width:20px; height:20px; font-size:10px;">${user.charAt(0).toUpperCase()}</span>
-            ${user}
+          <span style="font-weight:600; display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="goHome('${sessionUser}')">
+            <span class="avatar-sm" style="width:20px; height:20px; font-size:10px;">${sessionUser.charAt(0).toUpperCase()}</span>
+            ${sessionUser}
           </span>
           <button class="btn-action" onclick="logoutUser()">Sign out</button>
         `;
@@ -977,7 +1001,7 @@
       openAuthModal(mode);
     }
 
-    function closeAuthModal(event) {
+    function closeAuthModal() {
       document.getElementById("auth-modal").style.display = "none";
     }
 
@@ -1017,20 +1041,14 @@
 
           localStorage.setItem("gitimg_auth_token", data.token);
           localStorage.setItem("gitimg_auth_user", username);
-          currentUser = username;
 
           closeAuthModal();
-          renderNavAuth();
           showToast(`Logged in as ${username}`);
 
-          if (!currentRepo) {
-            loadHomeDashboard();
-          } else {
-            const url = new URL(window.location);
-            url.searchParams.set('user', username);
-            url.searchParams.set('daemon', serverUrl);
-            window.location.href = url.toString();
-          }
+          const url = new URL(window.location.origin + window.location.pathname);
+          url.searchParams.set('user', username);
+          url.searchParams.set('daemon', serverUrl);
+          window.location.href = url.toString();
         }
       } catch (err) {
         errorBox.style.display = "block";
@@ -1060,9 +1078,13 @@
       }
     }
 
-    function goHome() {
+    function goHome(targetUser) {
       const url = new URL(window.location.origin + window.location.pathname);
-      url.searchParams.set('user', currentUser);
+      if (targetUser) {
+        url.searchParams.set('user', targetUser);
+      } else if (sessionUser) {
+        url.searchParams.set('user', sessionUser);
+      }
       url.searchParams.set('daemon', serverUrl);
       window.location.href = url.toString();
     }
@@ -1070,13 +1092,17 @@
     function onRepoChanged(newRepo) {
       const url = new URL(window.location.origin + window.location.pathname);
       url.searchParams.set('repo', newRepo);
-      url.searchParams.set('user', currentUser);
+      url.searchParams.set('user', activeViewingUser);
       url.searchParams.set('daemon', serverUrl);
       window.location.href = url.toString();
     }
 
     function createNewProjectPrompt() {
-      const name = prompt("Enter new project/repository name:");
+      if (!isLoggedIn) {
+        openAuthModal('login');
+        return;
+      }
+      const name = prompt("Enter new artwork project / repository name:");
       if (name && name.trim()) {
         onRepoChanged(name.trim());
       }
@@ -1105,21 +1131,66 @@
     async function loadHomeDashboard() {
       document.getElementById("home-view").style.display = "block";
       document.getElementById("repo-workspace-view").style.display = "none";
-      document.getElementById("home-username-heading").innerText = currentUser;
-      document.getElementById("home-avatar-initial").innerText = currentUser.charAt(0).toUpperCase();
       document.getElementById("home-daemon-url").innerText = serverUrl;
 
+      const featuredBox = document.getElementById("featured-box");
+      const projectsSectionTitle = document.getElementById("projects-section-title");
+
+      if (isLoggedIn) {
+        featuredBox.innerHTML = `
+          <div class="avatar-hero">${sessionUser.charAt(0).toUpperCase()}</div>
+          <div class="featured-creator-info">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+              <h1 class="featured-title" style="margin:0;">${sessionUser}</h1>
+              <span class="badge-creator">GitImg Creator · Active</span>
+            </div>
+            <p style="color:var(--text-muted); margin:0 0 16px 0; font-size:15px;">
+              Native FastCDC chunking workspace linked to local daemon.
+            </p>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-action btn-primary" onclick="createNewProjectPrompt()">+ New Artwork Project</button>
+              <button class="btn-action" onclick="logoutUser()">Sign Out</button>
+            </div>
+          </div>
+        `;
+        projectsSectionTitle.innerText = "Your Workspaces & Canvases";
+        loadUserProjects(sessionUser);
+      } else {
+        featuredBox.innerHTML = `
+          <div class="avatar-hero" style="background:#30363d; color:#8b949e;">?</div>
+          <div class="featured-creator-info">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+              <h1 class="featured-title" style="margin:0;">Welcome to GitImg</h1>
+              <span class="badge-creator" style="color:#8b949e; border-color:#30363d; background:transparent;">Guest Mode</span>
+            </div>
+            <p style="color:var(--text-muted); margin:0 0 16px 0; font-size:15px;">
+              Fast Content-Defined Chunking VCS for digital artists and SFML drawing pipelines. Sign in to manage your canvases.
+            </p>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-action btn-primary" onclick="openAuthModal('login')">Sign In</button>
+              <button class="btn-action" onclick="openAuthModal('signup')">Create Account</button>
+            </div>
+          </div>
+        `;
+        projectsSectionTitle.innerText = `Public Projects (${activeViewingUser})`;
+        loadUserProjects(activeViewingUser);
+      }
+
+      loadCommunityAccounts();
+    }
+
+    async function loadUserProjects(user) {
       const grid = document.getElementById("home-repo-grid");
       const countEl = document.getElementById("home-repo-count");
 
       try {
-        const res = await fetch(`${serverUrl}/api/repos/${currentUser}`);
+        const res = await fetch(`${serverUrl}/api/repos/${user}`);
         if (!res.ok) throw new Error();
         const repos = await res.json();
-        countEl.innerText = `${repos.length} repositor${repos.length === 1 ? 'y' : 'ies'}`;
+        countEl.innerText = `${repos.length} project${repos.length === 1 ? '' : 's'}`;
 
         if (repos.length === 0) {
-          grid.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1;">No repositories found. Create one to begin.</p>`;
+          grid.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1;">No artwork repositories found for ${user}.</p>`;
           return;
         }
 
@@ -1141,13 +1212,67 @@
       }
     }
 
+    async function loadCommunityAccounts() {
+      const container = document.getElementById("other-accounts-list");
+      const statusText = document.getElementById("node-status-text");
+      const statusBadge = document.getElementById("accounts-node-status");
+
+      try {
+        const res = await fetch(`${serverUrl}/api/repos/all`);
+        statusBadge.classList.remove("offline");
+        statusText.innerText = "Online";
+
+        let knownUsers = new Set();
+        if (res.ok) {
+          const repos = await res.json();
+          repos.forEach(r => { if (r.owner) knownUsers.add(r.owner); });
+        }
+        knownUsers.add("ahmad");
+
+        const excludeUser = isLoggedIn ? sessionUser : null;
+        const otherUsers = Array.from(knownUsers).filter(u => u !== excludeUser);
+
+        if (otherUsers.length === 0) {
+          container.innerHTML = `
+            <div class="empty-account-box">
+              <svg height="24" viewBox="0 0 16 16" width="24" fill="var(--text-muted)" style="margin-bottom:8px;"><path d="M10.561 8.073a6.005 6.005 0 0 1 3.432 5.142.75.75 0 1 1-1.498.07 4.5 4.5 0 0 0-8.99 0 .75.75 0 0 1-1.498-.07 6.004 6.004 0 0 1 3.431-5.142 3.999 3.999 0 1 1 5.123 0ZM10.5 5a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"></path></svg>
+              <div>No other accounts registered on this node.</div>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = otherUsers.map(user => `
+          <div class="account-item">
+            <div class="account-item-left">
+              <div class="avatar-sm">${user.charAt(0).toUpperCase()}</div>
+              <div>
+                <a href="javascript:void(0)" onclick="goHome('${user}')" style="font-weight:600; font-size:13px;">${user}</a>
+                <div style="font-size:11px; color:var(--text-muted);">Creator</div>
+              </div>
+            </div>
+            <button class="btn-action" onclick="goHome('${user}')">View</button>
+          </div>
+        `).join('');
+
+      } catch (e) {
+        statusBadge.classList.add("offline");
+        statusText.innerText = "Offline";
+        container.innerHTML = `
+          <div class="empty-account-box" style="border-color:rgba(218,54,51,0.4);">
+            Daemon offline. Unable to reach registered accounts.
+          </div>
+        `;
+      }
+    }
+
     async function loadWorkspace() {
       document.getElementById("home-view").style.display = "none";
       document.getElementById("repo-workspace-view").style.display = "block";
 
-      document.getElementById("repo-owner").innerText = currentUser;
-      document.getElementById("avatar-initial").innerText = currentUser.charAt(0).toUpperCase();
-      document.getElementById("commit-author").innerText = currentUser;
+      document.getElementById("repo-owner").innerText = activeViewingUser;
+      document.getElementById("avatar-initial").innerText = activeViewingUser.charAt(0).toUpperCase();
+      document.getElementById("commit-author").innerText = activeViewingUser;
       document.getElementById("active-tunnel-url").innerText = serverUrl;
 
       await loadUserRepositories();
@@ -1157,7 +1282,7 @@
 
     async function loadUserRepositories() {
       try {
-        const res = await fetch(`${serverUrl}/api/repos/${currentUser}`);
+        const res = await fetch(`${serverUrl}/api/repos/${activeViewingUser}`);
         if (!res.ok) return;
         const repos = await res.json();
         const select = document.getElementById("repo-select");
@@ -1190,7 +1315,7 @@
       const statusText = document.getElementById("server-status-text");
 
       try {
-        const response = await fetch(`${serverUrl}/api/repo/${currentUser}/${currentRepo}`);
+        const response = await fetch(`${serverUrl}/api/repo/${activeViewingUser}/${currentRepo}`);
         if (!response.ok) throw new Error("Daemon error");
         
         repoAssets = await response.json();
@@ -1212,7 +1337,7 @@
 
     async function fetchCommits() {
       try {
-        const response = await fetch(`${serverUrl}/api/commits/${currentUser}/${currentRepo}`);
+        const response = await fetch(`${serverUrl}/api/commits/${activeViewingUser}/${currentRepo}`);
         if (!response.ok) return;
         repoCommits = await response.json();
         document.getElementById("commit-count-badge").innerText = repoCommits.length;
