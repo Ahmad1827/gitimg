@@ -3,22 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ahmad / WisdomPark · GitImg</title>
+  <title>GitImg Studio</title>
   <style>
     :root {
       --bg-page: #0d1117;
       --bg-header: #010409;
       --bg-surface: #161b22;
       --bg-subtle: #21262d;
-      --bg-card: #161b22;
       --border-default: #30363d;
       --border-muted: #21262d;
       --text-main: #e6edf3;
       --text-muted: #848d97;
       --accent: #2f81f7;
       --accent-hover: #58a6ff;
-      --success: #238636;
-      --danger: #da3633;
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     }
@@ -37,7 +34,6 @@
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; color: var(--accent-hover); }
 
-    /* Top Global Header */
     .gh-navbar {
       background-color: var(--bg-header);
       border-bottom: 1px solid var(--border-default);
@@ -59,17 +55,7 @@
     .gh-nav-links { display: flex; gap: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); }
     .gh-nav-links a { color: var(--text-main); }
     .gh-nav-links a:hover { color: var(--text-muted); text-decoration: none; }
-    .gh-search-input {
-      background: var(--bg-page);
-      border: 1px solid var(--border-default);
-      color: var(--text-main);
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-      width: 240px;
-    }
 
-    /* Repo Context Bar */
     .repo-header {
       background-color: var(--bg-surface);
       border-bottom: 1px solid var(--border-default);
@@ -91,6 +77,17 @@
       gap: 6px;
     }
     .repo-breadcrumb a { font-weight: 600; }
+    .project-selector {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-default);
+      color: var(--text-main);
+      font-size: 16px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
     .badge-visibility {
       font-size: 12px;
       padding: 1px 8px;
@@ -98,31 +95,8 @@
       border: 1px solid var(--border-default);
       color: var(--text-muted);
       font-weight: 500;
-      margin-left: 8px;
-    }
-    .repo-actions { display: flex; gap: 8px; }
-    .btn-action {
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-default);
-      color: var(--text-main);
-      padding: 4px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-action:hover { background: #30363d; }
-    .btn-action span.counter {
-      background: rgba(255,255,255,0.1);
-      padding: 0 6px;
-      border-radius: 10px;
-      font-size: 11px;
     }
 
-    /* Repo Navigation Tabs */
     .repo-tabs {
       max-width: 1280px;
       margin: 0 auto;
@@ -145,7 +119,7 @@
       color: var(--text-main);
       font-weight: 600;
     }
-    .tab-item span.count-pill {
+    .count-pill {
       background: var(--border-default);
       color: var(--text-main);
       border-radius: 12px;
@@ -153,7 +127,6 @@
       font-size: 11px;
     }
 
-    /* Main Container */
     .container {
       max-width: 1280px;
       margin: 24px auto;
@@ -163,7 +136,6 @@
       gap: 24px;
     }
 
-    /* Primary Repo View Area */
     .main-column { min-width: 0; }
 
     .view-toolbar {
@@ -198,7 +170,6 @@
     }
     .btn-toggle.active { background: var(--bg-subtle); border-color: #8b949e; }
 
-    /* Latest Commit Banner */
     .commit-banner {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
@@ -226,7 +197,6 @@
     .commit-msg { color: var(--text-main); font-weight: 500; }
     .commit-hash { font-family: var(--font-mono); color: var(--text-muted); font-size: 12px; }
 
-    /* Visual Grid Mode */
     .art-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -282,7 +252,6 @@
       border-radius: 4px;
     }
 
-    /* Traditional GitHub Table Mode */
     .files-table {
       width: 100%;
       border: 1px solid var(--border-default);
@@ -298,7 +267,23 @@
     .files-table td { padding: 10px 16px; font-size: 13px; }
     .file-name-cell { display: flex; align-items: center; gap: 10px; }
 
-    /* Sidebar / About */
+    .commits-container {
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      background: var(--bg-surface);
+      overflow: hidden;
+    }
+    .commit-row {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .commit-row:last-child { border-bottom: none; }
+    .commit-row-title { font-weight: 600; color: var(--text-main); margin-bottom: 4px; }
+    .commit-row-sub { font-size: 12px; color: var(--text-muted); }
+
     .sidebar { display: flex; flex-direction: column; gap: 24px; }
     .sidebar-section h3 { font-size: 16px; margin: 0 0 8px 0; }
     .sidebar-section p { font-size: 14px; color: var(--text-muted); margin: 0 0 16px 0; }
@@ -328,7 +313,6 @@
       background: currentColor;
     }
 
-    /* Fullscreen Modal View */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -367,7 +351,6 @@
       font-size: 20px;
       cursor: pointer;
     }
-    .modal-close:hover { color: var(--text-main); }
     .modal-body {
       background: #010409;
       display: flex;
@@ -392,6 +375,16 @@
       align-items: center;
       background: var(--bg-surface);
     }
+    .btn-action {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-default);
+      color: var(--text-main);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
     @media (max-width: 860px) {
       .container { grid-template-columns: 1fr; }
@@ -401,99 +394,83 @@
 </head>
 <body>
 
-  <!-- Global Header -->
   <header class="gh-navbar">
     <div class="gh-navbar-left">
-      <a href="#" class="gh-logo">
+      <a href="?" class="gh-logo">
         <svg height="24" viewBox="0 0 16 16" width="24" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
         <span>GitImg</span>
       </a>
       <div class="gh-nav-links">
-        <a href="#">Galleries</a>
-        <a href="#">Activity</a>
-        <a href="#">Documentation</a>
+        <a href="?">Projects</a>
       </div>
-    </div>
-    <div>
-      <input type="text" class="gh-search-input" placeholder="Type / to search artwork...">
     </div>
   </header>
 
-  <!-- Repository Header -->
   <div class="repo-header">
     <div class="repo-title-row">
       <div class="repo-breadcrumb">
         <svg height="16" viewBox="0 0 16 16" width="16" fill="var(--text-muted)"><path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8zM5 12.25v3.25a.25.25 0 00.4.2l1.45-1.087a.25.25 0 01.3 0L8.6 15.7a.25.25 0 00.4-.2v-3.25a.25.25 0 00-.25-.25h-3.5a.25.25 0 00-.25.25z"></path></svg>
-        <a href="#" id="repo-owner">ahmad</a>
+        <span id="repo-owner" style="font-weight:600;">ahmad</span>
         <span style="color:var(--text-muted)">/</span>
-        <a href="#" id="repo-name">WisdomPark</a>
+        <select id="repo-select" class="project-selector" onchange="onRepoChanged(this.value)">
+          <option value="WisdomPark">WisdomPark</option>
+        </select>
         <span class="badge-visibility">Public</span>
       </div>
-      <div class="repo-actions">
-        <button class="btn-action">
-          <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"></path></svg>
-          Star <span class="counter">1</span>
-        </button>
-        <button class="btn-action">
-          <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878z"></path></svg>
-          Fork <span class="counter">0</span>
-        </button>
+      <div>
+        <button class="btn-action" onclick="createNewProjectPrompt()">+ New Project</button>
       </div>
     </div>
 
-    <!-- Repo Navigation Subtabs -->
     <div class="repo-tabs">
-      <div class="tab-item active" onclick="switchTab('gallery')">
+      <div class="tab-item active" id="tab-btn-gallery" onclick="switchViewTab('gallery')">
         <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M1.75 2.5a.25.25 0 00-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 00.25-.25V2.75a.25.25 0 00-.25-.25H1.75zM0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0114.25 15H1.75A1.75 1.75 0 010 13.25V2.75zm3.5 3.75a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm-.25 6.5l3.25-4.333 2.5 3 3.5-4.667 2.25 3H3.25z"></path></svg>
-        Gallery / Code <span class="count-pill" id="asset-count-badge">0</span>
+        Artwork <span class="count-pill" id="asset-count-badge">0</span>
       </div>
-      <div class="tab-item" onclick="switchTab('commits')">
+      <div class="tab-item" id="tab-btn-commits" onclick="switchViewTab('commits')">
         <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M10.5 7.75a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm1.43.75a4.002 4.002 0 01-7.86 0H.75a.75.75 0 110-1.5h3.32a4.002 4.002 0 017.86 0h3.32a.75.75 0 110 1.5h-3.32z"></path></svg>
-        Commits
+        Commits <span class="count-pill" id="commit-count-badge">0</span>
       </div>
     </div>
   </div>
 
-  <!-- Primary Page Container -->
   <div class="container">
     <div class="main-column">
 
-      <!-- View Toolbar -->
-      <div class="view-toolbar">
-        <div class="branch-selector">
-          <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25z"></path></svg>
-          main
+      <div id="gallery-pane">
+        <div class="view-toolbar">
+          <div class="branch-selector">
+            <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M11.75 2.5a.75.75 0 100 1.5.75.75 0 000-1.5zm-2.25.75a2.25 2.25 0 113 2.122V6A2.5 2.5 0 0110 8.5H6a1 1 0 00-1 1v1.128a2.251 2.251 0 11-1.5 0V5.372a2.25 2.25 0 111.5 0v1.836A2.492 2.492 0 016 7h4a1 1 0 001-1v-.628A2.25 2.25 0 019.5 3.25z"></path></svg>
+            main
+          </div>
+          <div class="toolbar-right">
+            <button class="btn-toggle active" id="btn-grid" onclick="setDisplayLayout('grid')">Cards</button>
+            <button class="btn-toggle" id="btn-table" onclick="setDisplayLayout('table')">File Tree</button>
+          </div>
         </div>
-        <div class="toolbar-right">
-          <button class="btn-toggle active" id="btn-grid" onclick="setViewMode('grid')">Cards</button>
-          <button class="btn-toggle" id="btn-table" onclick="setViewMode('table')">File Tree</button>
+
+        <div class="commit-banner">
+          <div class="commit-author-section">
+            <div class="avatar-sm" id="avatar-initial">A</div>
+            <span style="font-weight:600;" id="commit-author">ahmad</span>
+            <span class="commit-msg" id="latest-commit-msg">Synchronizing workspace assets via FastCDC</span>
+          </div>
+          <div class="commit-hash" id="latest-commit-hash">latest</div>
         </div>
+
+        <table class="files-table" id="files-table-view" style="display: none;">
+          <tbody id="files-table-body"></tbody>
+        </table>
+
+        <div class="art-grid" id="art-grid-view"></div>
       </div>
 
-      <!-- Latest Commit Box -->
-      <div class="commit-banner">
-        <div class="commit-author-section">
-          <div class="avatar-sm">A</div>
-          <span style="font-weight:600;" id="commit-author">ahmad</span>
-          <span class="commit-msg" id="latest-commit-msg">Synchronizing workspace assets via FastCDC</span>
-        </div>
-        <div class="commit-hash" id="latest-commit-hash">latest</div>
+      <div id="commits-pane" style="display: none;">
+        <div class="commits-container" id="commits-list-view"></div>
       </div>
 
-      <!-- File Table View -->
-      <table class="files-table" id="files-table-view" style="display: none;">
-        <tbody id="files-table-body">
-          <!-- Populated by JS -->
-        </tbody>
-      </table>
-
-      <!-- Visual Card Grid View -->
-      <div class="art-grid" id="art-grid-view">
-        <!-- Populated by JS -->
-      </div>
     </div>
 
-    <!-- Right Sidebar / Metadata -->
     <div class="sidebar">
       <div class="sidebar-section">
         <h3>About</h3>
@@ -522,9 +499,7 @@
 
       <div class="sidebar-section">
         <h3>Connected Daemon</h3>
-        <p style="font-size:12px; font-family:var(--font-mono); word-break:break-all;" id="active-tunnel-url">
-          <!-- Dynamic -->
-        </p>
+        <p style="font-size:12px; font-family:var(--font-mono); word-break:break-all;" id="active-tunnel-url"></p>
         <button class="btn-action" style="width:100%; justify-content:center;" onclick="changeServerUrl()">
           Update Endpoint URL
         </button>
@@ -532,7 +507,6 @@
     </div>
   </div>
 
-  <!-- Asset Inspection Modal -->
   <div class="modal-backdrop" id="asset-modal" onclick="closeModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -554,14 +528,19 @@
   </div>
 
   <script>
-    // Set your permanent or active trycloudflare address here
     const DEFAULT_SERVER_URL = "https://exceptions-pope-details-witch.trycloudflare.com";
-    const USER = "ahmad";
-    const REPO = "WisdomPark";
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentUser = urlParams.get('user') || "ahmad";
+    let currentRepo = urlParams.get('repo') || "WisdomPark";
 
     let serverUrl = localStorage.getItem("gitimg_daemon_url") || DEFAULT_SERVER_URL;
     let repoAssets = [];
+    let repoCommits = [];
 
+    document.getElementById("repo-owner").innerText = currentUser;
+    document.getElementById("avatar-initial").innerText = currentUser.charAt(0).toUpperCase();
+    document.getElementById("commit-author").innerText = currentUser;
     document.getElementById("active-tunnel-url").innerText = serverUrl;
 
     function changeServerUrl() {
@@ -573,7 +552,41 @@
       }
     }
 
-    function setViewMode(mode) {
+    function onRepoChanged(newRepo) {
+      const url = new URL(window.location);
+      url.searchParams.set('repo', newRepo);
+      url.searchParams.set('user', currentUser);
+      window.location.href = url.toString();
+    }
+
+    function createNewProjectPrompt() {
+      const name = prompt("Enter new project/repository name:");
+      if (name && name.trim()) {
+        onRepoChanged(name.trim());
+      }
+    }
+
+    function switchViewTab(tab) {
+      const gPane = document.getElementById("gallery-pane");
+      const cPane = document.getElementById("commits-pane");
+      const gBtn = document.getElementById("tab-btn-gallery");
+      const cBtn = document.getElementById("tab-btn-commits");
+
+      if (tab === 'gallery') {
+        gPane.style.display = "block";
+        cPane.style.display = "none";
+        gBtn.classList.add("active");
+        cBtn.classList.remove("active");
+      } else {
+        gPane.style.display = "none";
+        cPane.style.display = "block";
+        gBtn.classList.remove("active");
+        cBtn.classList.add("active");
+        fetchCommits();
+      }
+    }
+
+    function setDisplayLayout(mode) {
       const grid = document.getElementById("art-grid-view");
       const table = document.getElementById("files-table-view");
       const btnGrid = document.getElementById("btn-grid");
@@ -592,16 +605,45 @@
       }
     }
 
-    async function fetchRepository() {
+    async function loadUserRepositories() {
+      try {
+        const res = await fetch(`${serverUrl}/api/repos/${currentUser}`);
+        if (!res.ok) return;
+        const repos = await res.json();
+        const select = document.getElementById("repo-select");
+        select.innerHTML = "";
+        
+        let foundCurrent = false;
+        repos.forEach(r => {
+          const opt = document.createElement("option");
+          opt.value = r.name;
+          opt.innerText = r.name;
+          if (r.name === currentRepo) {
+            opt.selected = true;
+            foundCurrent = true;
+          }
+          select.appendChild(opt);
+        });
+
+        if (!foundCurrent) {
+          const opt = document.createElement("option");
+          opt.value = currentRepo;
+          opt.innerText = currentRepo;
+          opt.selected = true;
+          select.appendChild(opt);
+        }
+      } catch (e) {}
+    }
+
+    async function fetchAssets() {
       const statusPill = document.getElementById("server-status-pill");
       const statusText = document.getElementById("server-status-text");
 
       try {
-        const response = await fetch(`${serverUrl}/api/repo/${USER}/${REPO}`);
-        if (!response.ok) throw new Error("Daemon returned status " + response.status);
+        const response = await fetch(`${serverUrl}/api/repo/${currentUser}/${currentRepo}`);
+        if (!response.ok) throw new Error("Daemon error");
         
         repoAssets = await response.json();
-        
         statusPill.classList.remove("offline");
         statusText.innerText = "Online";
 
@@ -611,11 +653,43 @@
         statusText.innerText = "Offline";
         document.getElementById("art-grid-view").innerHTML = `
           <div style="grid-column: 1/-1; padding: 48px 0; text-align: center; color: var(--text-muted);">
-            <p>Unable to connect to local workstation daemon at <code>${serverUrl}</code></p>
+            <p>Workstation daemon offline at <code>${serverUrl}</code></p>
             <button class="btn-action" style="margin: 0 auto;" onclick="changeServerUrl()">Change Endpoint URL</button>
           </div>
         `;
       }
+    }
+
+    async function fetchCommits() {
+      try {
+        const response = await fetch(`${serverUrl}/api/commits/${currentUser}/${currentRepo}`);
+        if (!response.ok) return;
+        repoCommits = await response.json();
+        document.getElementById("commit-count-badge").innerText = repoCommits.length;
+
+        const container = document.getElementById("commits-list-view");
+        if (repoCommits.length === 0) {
+          container.innerHTML = `<div style="padding:24px; text-align:center; color:var(--text-muted);">No commits recorded yet.</div>`;
+          return;
+        }
+
+        container.innerHTML = repoCommits.map(c => `
+          <div class="commit-row">
+            <div>
+              <div class="commit-row-title">${c.msg}</div>
+              <div class="commit-row-sub">committed on ${new Date(c.time * 1000).toLocaleString()}</div>
+            </div>
+            <div>
+              <code style="font-family:var(--font-mono); font-size:12px; background:var(--bg-subtle); padding:3px 8px; border-radius:4px; border:1px solid var(--border-default);">${c.hash.substring(0, 7)}</code>
+            </div>
+          </div>
+        `).join('');
+
+        if (repoCommits.length > 0) {
+          document.getElementById("latest-commit-msg").innerText = repoCommits[0].msg;
+          document.getElementById("latest-commit-hash").innerText = repoCommits[0].hash.substring(0, 7);
+        }
+      } catch (e) {}
     }
 
     function renderAssets(assets) {
@@ -636,7 +710,6 @@
         return;
       }
 
-      // Render Visual Grid
       grid.innerHTML = assets.map((item, idx) => {
         totalBytes += item.size;
         const ext = item.file.split('.').pop();
@@ -654,7 +727,6 @@
         `;
       }).join('');
 
-      // Render Classic File Tree Table
       tableBody.innerHTML = assets.map((item, idx) => {
         return `
           <tr>
@@ -696,7 +768,9 @@
       if (e.key === "Escape") closeModal();
     });
 
-    fetchRepository();
+    loadUserRepositories();
+    fetchAssets();
+    fetchCommits();
   </script>
 </body>
 </html>
