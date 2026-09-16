@@ -747,7 +747,6 @@
     .diff-ctrl-row { display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; margin-top: 12px; }
     .diff-slider { width: 280px; cursor: pointer; }
 
-    /* Export Modal */
     .scale-card-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -800,7 +799,6 @@
     <div class="gh-navbar-right" id="nav-auth-container"></div>
   </header>
 
-  <!-- HOME VIEW -->
   <div id="home-view" style="display: none;">
     <div class="home-container">
       <div>
@@ -835,7 +833,6 @@
     </div>
   </div>
 
-  <!-- WORKSPACE VIEW -->
   <div id="repo-workspace-view" style="display: none;">
     <div class="repo-header">
       <div class="repo-title-row">
@@ -919,7 +916,6 @@
     </div>
   </div>
 
-  <!-- ASSET MODAL -->
   <div class="modal-backdrop" id="asset-modal" onclick="closeModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -933,6 +929,8 @@
         <div>
           <span>Manifest: </span><code id="modal-manifest" style="font-family:var(--font-mono);">--</code>
           <span style="margin: 0 8px;">•</span>
+          <span id="modal-dimensions">Detecting...</span>
+          <span style="margin: 0 8px;">•</span>
           <span id="modal-filesize">0 KB</span>
         </div>
         <div style="display:flex; gap:8px;">
@@ -943,7 +941,6 @@
     </div>
   </div>
 
-  <!-- EXPORT / SCALE PICKER MODAL -->
   <div class="modal-backdrop" id="export-modal" onclick="closeExportModal(event)">
     <div class="auth-card" style="width:440px;" onclick="event.stopPropagation()">
       <div class="modal-header" style="background:transparent; padding:0 0 12px 0; margin-bottom:12px;">
@@ -957,28 +954,27 @@
       <div class="scale-card-grid">
         <button class="scale-btn" onclick="executeExport(1)">
           <strong style="color:var(--text-main);">1× Raw (Native)</strong>
-          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-1">64 × 64 px</span>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-1">Probing...</span>
         </button>
 
         <button class="scale-btn" onclick="executeExport(4)">
           <strong style="color:#58a6ff;">4× Scaled</strong>
-          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-4">256 × 256 px</span>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-4">Probing...</span>
         </button>
 
         <button class="scale-btn" onclick="executeExport(8)">
           <strong style="color:#3fb950;">8× HD Export</strong>
-          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-8">512 × 512 px</span>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-8">Probing...</span>
         </button>
 
         <button class="scale-btn" onclick="executeExport(16)">
           <strong style="color:#f78166;">16× Ultra</strong>
-          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-16">1024 × 1024 px</span>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-16">Probing...</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- DIFF MODAL -->
   <div class="modal-backdrop" id="diff-modal" onclick="closeDiffModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -1008,7 +1004,6 @@
     </div>
   </div>
 
-  <!-- AUTH MODAL -->
   <div class="modal-backdrop" id="auth-modal" onclick="closeAuthModal(event)">
     <div class="auth-card" onclick="event.stopPropagation()">
       <div style="text-align:center; margin-bottom:12px;">
@@ -1081,6 +1076,13 @@
       setTimeout(() => { toast.style.display = "none"; }, 3000);
     }
 
+    function updateScaleLabels(w, h) {
+      document.getElementById("scale-res-1").innerText = `${w} × ${h} px`;
+      document.getElementById("scale-res-4").innerText = `${w * 4} × ${h * 4} px`;
+      document.getElementById("scale-res-8").innerText = `${w * 8} × ${h * 8} px`;
+      document.getElementById("scale-res-16").innerText = `${w * 16} × ${h * 16} px`;
+    }
+
     function openExportModal(url, filename, mode = 'download') {
       pendingExportUrl = url;
       pendingExportFilename = filename;
@@ -1088,10 +1090,26 @@
 
       document.getElementById("export-modal-title").innerText = mode === 'download' ? "Download Pixel Art" : "Open In Scaled Tab";
       document.getElementById("export-modal-desc").innerText = mode === 'download' ? "Choose an export scale with nearest-neighbor crispness:" : "Open with nearest-neighbor upscale in a new tab:";
+
+      document.getElementById("scale-res-1").innerText = "Probing...";
+      document.getElementById("scale-res-4").innerText = "Probing...";
+      document.getElementById("scale-res-8").innerText = "Probing...";
+      document.getElementById("scale-res-16").innerText = "Probing...";
+
       document.getElementById("export-modal").style.display = "flex";
+
+      const probe = new Image();
+      probe.src = url;
+      if (probe.complete && probe.naturalWidth > 0) {
+        updateScaleLabels(probe.naturalWidth, probe.naturalHeight);
+      } else {
+        probe.onload = () => {
+          updateScaleLabels(probe.naturalWidth, probe.naturalHeight);
+        };
+      }
     }
 
-    function closeExportModal(e) {
+    function closeExportModal() {
       document.getElementById("export-modal").style.display = "none";
     }
 
@@ -1611,7 +1629,6 @@
           <div class="artwork-group-card">
             <div class="artwork-primary-preview">
               <div class="primary-img-wrapper" onclick="openDirectModal('${head.raw_url}', '${head.file}', '${head.manifest}', ${head.size})">
-                <!-- Uses raw_url directly with nearest-neighbor rendering to eliminate thumbnail blur -->
                 <img src="${serverUrl}${head.raw_url}" alt="${head.file}">
               </div>
               <div class="artwork-summary">
@@ -1651,7 +1668,6 @@
                   return `
                     <div class="history-item">
                       <div class="history-item-left">
-                        <!-- Uses raw_url for razor-sharp pixel thumbnails -->
                         <img class="history-thumb" src="${serverUrl}${rev.raw_url}" alt="v${actualRevIndex + 1}" onclick="openDirectModal('${rev.raw_url}', '${rev.file}', '${rev.manifest}', ${rev.size})">
                         <div class="history-details">
                           <div class="history-title">Revision v${actualRevIndex + 1}</div>
@@ -1772,7 +1788,15 @@
 
     function openDirectModal(rawUrl, name, manifest, size) {
       document.getElementById("modal-filename").innerText = name;
-      document.getElementById("modal-image").src = `${serverUrl}${rawUrl}`;
+      const modalImg = document.getElementById("modal-image");
+      const dimSpan = document.getElementById("modal-dimensions");
+      dimSpan.innerText = "Detecting...";
+
+      modalImg.onload = () => {
+        dimSpan.innerText = `${modalImg.naturalWidth} × ${modalImg.naturalHeight} px`;
+      };
+      modalImg.src = `${serverUrl}${rawUrl}`;
+
       document.getElementById("modal-manifest").innerText = manifest;
       document.getElementById("modal-filesize").innerText = `${(size / 1024).toFixed(1)} KB`;
       document.getElementById("modal-open-btn").onclick = () => openExportModal(`${serverUrl}${rawUrl}`, name, 'open');
