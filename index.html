@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitImg</title>
+  <title>GitImg Studio</title>
   <style>
     :root {
       --bg-page: #0d1117;
@@ -747,6 +747,30 @@
     .diff-ctrl-row { display: flex; align-items: center; gap: 12px; width: 100%; justify-content: center; margin-top: 12px; }
     .diff-slider { width: 280px; cursor: pointer; }
 
+    /* Export Modal */
+    .scale-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .scale-btn {
+      background: var(--bg-page);
+      border: 1px solid var(--border-default);
+      color: var(--text-main);
+      padding: 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .scale-btn:hover {
+      border-color: var(--accent);
+      background: var(--bg-subtle);
+    }
+
     @media (max-width: 900px) {
       .home-container { grid-template-columns: 1fr; }
       .container { grid-template-columns: 1fr; }
@@ -755,6 +779,7 @@
       .primary-img-wrapper { border-right: none; border-bottom: 1px solid var(--border-default); min-height: 280px; }
       .sidebar { border-top: 1px solid var(--border-default); padding-top: 24px; }
       .side-by-side-container { flex-direction: column; }
+      .scale-card-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -775,11 +800,11 @@
     <div class="gh-navbar-right" id="nav-auth-container"></div>
   </header>
 
+  <!-- HOME VIEW -->
   <div id="home-view" style="display: none;">
     <div class="home-container">
       <div>
         <div class="featured-creator-box" id="featured-box"></div>
-
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-default); padding-bottom:12px;">
             <h2 style="margin:0; font-size:18px;" id="projects-section-title">Repositories &amp; Canvases</h2>
@@ -797,13 +822,9 @@
               <span class="status-dot"></span> <span id="node-status-text">Checking</span>
             </span>
           </div>
-          
           <div id="other-accounts-list">
-            <div style="color:var(--text-muted); font-size:13px; text-align:center; padding:16px 0;">
-              Scanning network daemon...
-            </div>
+            <div style="color:var(--text-muted); font-size:13px; text-align:center; padding:16px 0;">Scanning network daemon...</div>
           </div>
-
           <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-default);">
             <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase; margin-bottom:6px; font-weight:700;">Active Tunnel</div>
             <code style="font-size:11px; font-family:var(--font-mono); word-break:break-all;" id="home-daemon-url">--</code>
@@ -811,10 +832,10 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
+  <!-- WORKSPACE VIEW -->
   <div id="repo-workspace-view" style="display: none;">
     <div class="repo-header">
       <div class="repo-title-row">
@@ -898,6 +919,7 @@
     </div>
   </div>
 
+  <!-- ASSET MODAL -->
   <div class="modal-backdrop" id="asset-modal" onclick="closeModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -914,13 +936,49 @@
           <span id="modal-filesize">0 KB</span>
         </div>
         <div style="display:flex; gap:8px;">
-          <a href="#" id="modal-raw-link" target="_blank" class="btn-action">Open Original</a>
-          <button id="modal-download-btn" class="btn-action">Download</button>
+          <button class="btn-action" id="modal-open-btn">Open View Options</button>
+          <button class="btn-action btn-primary" id="modal-download-btn">Download / Export</button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- EXPORT / SCALE PICKER MODAL -->
+  <div class="modal-backdrop" id="export-modal" onclick="closeExportModal(event)">
+    <div class="auth-card" style="width:440px;" onclick="event.stopPropagation()">
+      <div class="modal-header" style="background:transparent; padding:0 0 12px 0; margin-bottom:12px;">
+        <span class="modal-title" id="export-modal-title">Export Pixel Art</span>
+        <button class="modal-close" onclick="closeExportModal()">&times;</button>
+      </div>
+      <div style="color:var(--text-muted); font-size:13px;" id="export-modal-desc">
+        Select upscale resolution for pixel art rendering:
+      </div>
+
+      <div class="scale-card-grid">
+        <button class="scale-btn" onclick="executeExport(1)">
+          <strong style="color:var(--text-main);">1× Raw (Native)</strong>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-1">64 × 64 px</span>
+        </button>
+
+        <button class="scale-btn" onclick="executeExport(4)">
+          <strong style="color:#58a6ff;">4× Scaled</strong>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-4">256 × 256 px</span>
+        </button>
+
+        <button class="scale-btn" onclick="executeExport(8)">
+          <strong style="color:#3fb950;">8× HD Export</strong>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-8">512 × 512 px</span>
+        </button>
+
+        <button class="scale-btn" onclick="executeExport(16)">
+          <strong style="color:#f78166;">16× Ultra</strong>
+          <span style="font-size:12px; color:var(--text-muted);" id="scale-res-16">1024 × 1024 px</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIFF MODAL -->
   <div class="modal-backdrop" id="diff-modal" onclick="closeDiffModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -950,6 +1008,7 @@
     </div>
   </div>
 
+  <!-- AUTH MODAL -->
   <div class="modal-backdrop" id="auth-modal" onclick="closeAuthModal(event)">
     <div class="auth-card" onclick="event.stopPropagation()">
       <div style="text-align:center; margin-bottom:12px;">
@@ -1011,6 +1070,10 @@
     let activeDiffMode = 'swipe';
     let currentAuthMode = 'login';
 
+    let pendingExportUrl = "";
+    let pendingExportFilename = "";
+    let pendingExportMode = "download";
+
     function showToast(msg) {
       const toast = document.getElementById("toast");
       toast.innerText = msg;
@@ -1018,22 +1081,75 @@
       setTimeout(() => { toast.style.display = "none"; }, 3000);
     }
 
-    async function downloadAsset(url, filename) {
+    function openExportModal(url, filename, mode = 'download') {
+      pendingExportUrl = url;
+      pendingExportFilename = filename;
+      pendingExportMode = mode;
+
+      document.getElementById("export-modal-title").innerText = mode === 'download' ? "Download Pixel Art" : "Open In Scaled Tab";
+      document.getElementById("export-modal-desc").innerText = mode === 'download' ? "Choose an export scale with nearest-neighbor crispness:" : "Open with nearest-neighbor upscale in a new tab:";
+      document.getElementById("export-modal").style.display = "flex";
+    }
+
+    function closeExportModal(e) {
+      document.getElementById("export-modal").style.display = "none";
+    }
+
+    async function executeExport(scale) {
+      closeExportModal();
       try {
-        const res = await fetch(url);
+        const res = await fetch(pendingExportUrl);
         if (!res.ok) throw new Error();
         const blob = await res.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(blobUrl);
-        showToast(`Downloading ${filename}`);
-      } catch (e) {
-        window.open(url, '_blank');
+
+        if (scale === 1 && pendingExportMode === 'download') {
+          const blobUrl = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = blobUrl;
+          a.download = pendingExportFilename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(blobUrl);
+          showToast(`Downloaded raw ${pendingExportFilename}`);
+          return;
+        }
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        const tempBlobUrl = URL.createObjectURL(blob);
+        img.src = tempBlobUrl;
+        await img.decode();
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth * scale;
+        canvas.height = img.naturalHeight * scale;
+        const ctx = canvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(tempBlobUrl);
+
+        canvas.toBlob((scaledBlob) => {
+          const blobUrl = URL.createObjectURL(scaledBlob);
+          if (pendingExportMode === 'download') {
+            const a = document.createElement('a');
+            const extIdx = pendingExportFilename.lastIndexOf('.');
+            const baseName = extIdx !== -1 ? pendingExportFilename.substring(0, extIdx) : pendingExportFilename;
+            const ext = extIdx !== -1 ? pendingExportFilename.substring(extIdx) : '.png';
+            a.href = blobUrl;
+            a.download = scale === 1 ? pendingExportFilename : `${baseName}_${scale}x${ext}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+            showToast(`Downloaded (${canvas.width}×${canvas.height} px)`);
+          } else {
+            window.open(blobUrl, '_blank');
+          }
+        }, 'image/png');
+
+      } catch (err) {
+        window.open(pendingExportUrl, '_blank');
       }
     }
 
@@ -1495,7 +1611,8 @@
           <div class="artwork-group-card">
             <div class="artwork-primary-preview">
               <div class="primary-img-wrapper" onclick="openDirectModal('${head.raw_url}', '${head.file}', '${head.manifest}', ${head.size})">
-                <img src="${serverUrl}${head.thumb_url}" alt="${head.file}">
+                <!-- Uses raw_url directly with nearest-neighbor rendering to eliminate thumbnail blur -->
+                <img src="${serverUrl}${head.raw_url}" alt="${head.file}">
               </div>
               <div class="artwork-summary">
                 <div>
@@ -1511,8 +1628,8 @@
                   </div>
                 </div>
                 <div class="summary-actions">
-                  <a href="${serverUrl}${head.raw_url}" target="_blank" class="btn-action">Open Original</a>
-                  <button class="btn-action" onclick="downloadAsset('${serverUrl}${head.raw_url}', '${head.file}')">Download</button>
+                  <button class="btn-action" onclick="openExportModal('${serverUrl}${head.raw_url}', '${head.file}', 'open')">Open Scaled Tab</button>
+                  <button class="btn-action btn-primary" onclick="openExportModal('${serverUrl}${head.raw_url}', '${head.file}', 'download')">Download</button>
                   ${previousRevisions.length > 0 ? `
                     <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${versions.length - 2}, ${versions.length - 1})">
                       Diff with Prior (v${vCount - 1})
@@ -1534,7 +1651,8 @@
                   return `
                     <div class="history-item">
                       <div class="history-item-left">
-                        <img class="history-thumb" src="${serverUrl}${rev.thumb_url}" alt="v${actualRevIndex + 1}" onclick="openDirectModal('${rev.raw_url}', '${rev.file}', '${rev.manifest}', ${rev.size})">
+                        <!-- Uses raw_url for razor-sharp pixel thumbnails -->
+                        <img class="history-thumb" src="${serverUrl}${rev.raw_url}" alt="v${actualRevIndex + 1}" onclick="openDirectModal('${rev.raw_url}', '${rev.file}', '${rev.manifest}', ${rev.size})">
                         <div class="history-details">
                           <div class="history-title">Revision v${actualRevIndex + 1}</div>
                           <div class="history-sub">${new Date(rev.time * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} · ${(rev.size / 1024).toFixed(1)} KB · ${rev.manifest.substring(0, 7)}</div>
@@ -1542,7 +1660,7 @@
                       </div>
                       <div style="display:flex; gap:8px; flex-wrap:wrap;">
                         <button class="btn-action" onclick="openDirectModal('${rev.raw_url}', '${rev.file} (v${actualRevIndex + 1})', '${rev.manifest}', ${rev.size})">Inspect</button>
-                        <button class="btn-action" onclick="downloadAsset('${serverUrl}${rev.raw_url}', '${revDownloadName}')">Download</button>
+                        <button class="btn-action" onclick="openExportModal('${serverUrl}${rev.raw_url}', '${revDownloadName}', 'download')">Download</button>
                         <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${actualRevIndex}, ${versions.length - 1})">Compare vs HEAD</button>
                       </div>
                     </div>
@@ -1657,8 +1775,8 @@
       document.getElementById("modal-image").src = `${serverUrl}${rawUrl}`;
       document.getElementById("modal-manifest").innerText = manifest;
       document.getElementById("modal-filesize").innerText = `${(size / 1024).toFixed(1)} KB`;
-      document.getElementById("modal-raw-link").href = `${serverUrl}${rawUrl}`;
-      document.getElementById("modal-download-btn").onclick = () => downloadAsset(`${serverUrl}${rawUrl}`, name.replace(/\s+/g, '_'));
+      document.getElementById("modal-open-btn").onclick = () => openExportModal(`${serverUrl}${rawUrl}`, name, 'open');
+      document.getElementById("modal-download-btn").onclick = () => openExportModal(`${serverUrl}${rawUrl}`, name.replace(/\s+/g, '_'), 'download');
       document.getElementById("asset-modal").style.display = "flex";
     }
 
@@ -1677,6 +1795,7 @@
         closeModal();
         closeDiffModal();
         closeAuthModal();
+        closeExportModal();
       }
     });
 
