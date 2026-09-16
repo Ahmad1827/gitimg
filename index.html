@@ -100,7 +100,6 @@
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
 
-    /* Home Layout */
     .home-container {
       max-width: 1280px;
       margin: 32px auto;
@@ -173,7 +172,6 @@
       gap: 8px;
     }
 
-    /* Accounts Sidebar on Right */
     .accounts-panel {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
@@ -224,7 +222,6 @@
       border: 1px dashed var(--border-default);
     }
 
-    /* Workspace Elements */
     .repo-header {
       background-color: var(--bg-surface);
       border-bottom: 1px solid var(--border-default);
@@ -388,6 +385,7 @@
       display: flex;
       gap: 10px;
       margin-top: 20px;
+      flex-wrap: wrap;
     }
 
     .history-drawer-toggle {
@@ -427,6 +425,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      flex-wrap: wrap;
     }
     .history-item-left {
       display: flex;
@@ -504,7 +503,6 @@
       background: currentColor;
     }
 
-    /* Modals */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -563,9 +561,10 @@
       justify-content: space-between;
       align-items: center;
       background: var(--bg-surface);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
-    /* Auth Modal */
     .auth-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-default);
@@ -620,7 +619,6 @@
       font-size: 13px;
     }
 
-    /* Diff View */
     .diff-mode-bar {
       display: flex;
       gap: 8px;
@@ -699,15 +697,10 @@
     <div class="gh-navbar-right" id="nav-auth-container"></div>
   </header>
 
-  <!-- HOME VIEW -->
   <div id="home-view" style="display: none;">
     <div class="home-container">
-      
-      <!-- Left: Big Featured Creator Display -->
       <div>
-        <div class="featured-creator-box" id="featured-box">
-          <!-- Dynamic rendering based on login status -->
-        </div>
+        <div class="featured-creator-box" id="featured-box"></div>
 
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-default); padding-bottom:12px;">
@@ -718,7 +711,6 @@
         </div>
       </div>
 
-      <!-- Right: All Other Registered Accounts -->
       <div>
         <div class="accounts-panel">
           <div class="accounts-panel-header">
@@ -745,7 +737,6 @@
     </div>
   </div>
 
-  <!-- REPOSITORY WORKSPACE VIEW -->
   <div id="repo-workspace-view" style="display: none;">
     <div class="repo-header">
       <div class="repo-title-row">
@@ -829,7 +820,6 @@
     </div>
   </div>
 
-  <!-- Asset Inspection Modal -->
   <div class="modal-backdrop" id="asset-modal" onclick="closeModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -845,12 +835,14 @@
           <span style="margin: 0 8px;">•</span>
           <span id="modal-filesize">0 KB</span>
         </div>
-        <a href="#" id="modal-raw-link" target="_blank" class="btn-action">Open Original</a>
+        <div style="display:flex; gap:8px;">
+          <a href="#" id="modal-raw-link" target="_blank" class="btn-action">Open Original</a>
+          <button id="modal-download-btn" class="btn-action">Download</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Diff Inspection Modal -->
   <div class="modal-backdrop" id="diff-modal" onclick="closeDiffModal(event)">
     <div class="modal-window" onclick="event.stopPropagation()">
       <div class="modal-header">
@@ -880,7 +872,6 @@
     </div>
   </div>
 
-  <!-- Authentication Modal -->
   <div class="modal-backdrop" id="auth-modal" onclick="closeAuthModal(event)">
     <div class="auth-card" onclick="event.stopPropagation()">
       <div style="text-align:center; margin-bottom:12px;">
@@ -947,6 +938,25 @@
       toast.innerText = msg;
       toast.style.display = "block";
       setTimeout(() => { toast.style.display = "none"; }, 3000);
+    }
+
+    async function downloadAsset(url, filename) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error();
+        const blob = await res.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        showToast(`Downloading ${filename}`);
+      } catch (e) {
+        window.open(url, '_blank');
+      }
     }
 
     function renderNavAuth() {
@@ -1424,6 +1434,7 @@
                 </div>
                 <div class="summary-actions">
                   <a href="${serverUrl}${head.raw_url}" target="_blank" class="btn-action">Open Original</a>
+                  <button class="btn-action" onclick="downloadAsset('${serverUrl}${head.raw_url}', '${head.file}')">Download</button>
                   ${previousRevisions.length > 0 ? `
                     <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${versions.length - 2}, ${versions.length - 1})">
                       Diff with Prior (v${vCount - 1})
@@ -1441,6 +1452,7 @@
               <div class="history-list" id="history-list-${fileIdx}">
                 ${previousRevisions.map((rev, revRevIdx) => {
                   const actualRevIndex = previousRevisions.length - 1 - revRevIdx;
+                  const revDownloadName = rev.file.replace(/(\.[^.]+)$/, `_v${actualRevIndex + 1}$1`);
                   return `
                     <div class="history-item">
                       <div class="history-item-left">
@@ -1450,8 +1462,9 @@
                           <div class="history-sub">${new Date(rev.time * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} · ${(rev.size / 1024).toFixed(1)} KB · ${rev.manifest.substring(0, 7)}</div>
                         </div>
                       </div>
-                      <div style="display:flex; gap:8px;">
+                      <div style="display:flex; gap:8px; flex-wrap:wrap;">
                         <button class="btn-action" onclick="openDirectModal('${rev.raw_url}', '${rev.file} (v${actualRevIndex + 1})', '${rev.manifest}', ${rev.size})">Inspect</button>
+                        <button class="btn-action" onclick="downloadAsset('${serverUrl}${rev.raw_url}', '${revDownloadName}')">Download</button>
                         <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${actualRevIndex}, ${versions.length - 1})">Compare vs HEAD</button>
                       </div>
                     </div>
@@ -1567,6 +1580,7 @@
       document.getElementById("modal-manifest").innerText = manifest;
       document.getElementById("modal-filesize").innerText = `${(size / 1024).toFixed(1)} KB`;
       document.getElementById("modal-raw-link").href = `${serverUrl}${rawUrl}`;
+      document.getElementById("modal-download-btn").onclick = () => downloadAsset(`${serverUrl}${rawUrl}`, name.replace(/\s+/g, '_'));
       document.getElementById("asset-modal").style.display = "flex";
     }
 
