@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitImg</title>
+  <title>GitImg Studio</title>
   <style>
     :root {
       --bg-page: #0d1117;
@@ -83,6 +83,12 @@
       color: #fff;
     }
     .btn-diff:hover { background: #388bfd; }
+    .btn-anim {
+      background: #8957e5;
+      border: 1px solid rgba(240,246,252,0.1);
+      color: #fff;
+    }
+    .btn-anim:hover { background: #a371f7; }
 
     .toast-banner {
       display: none;
@@ -770,6 +776,55 @@
       background: var(--bg-subtle);
     }
 
+    .sprite-viewport {
+      border: 2px solid var(--border-default);
+      background-color: #05070a;
+      background-image:
+        linear-gradient(45deg, #161b22 25%, transparent 25%),
+        linear-gradient(-45deg, #161b22 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #161b22 75%),
+        linear-gradient(-45deg, transparent 75%, #161b22 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sprite-control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: var(--bg-subtle);
+      padding: 12px 18px;
+      border-top: 1px solid var(--border-default);
+    }
+
+    .sprite-ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .sprite-num-input {
+      width: 60px;
+      background: var(--bg-page);
+      border: 1px solid var(--border-default);
+      border-radius: 4px;
+      color: var(--text-main);
+      padding: 3px 6px;
+      font-size: 13px;
+      text-align: center;
+    }
+
     @media (max-width: 900px) {
       .home-container { grid-template-columns: 1fr; }
       .container { grid-template-columns: 1fr; }
@@ -779,6 +834,7 @@
       .sidebar { border-top: 1px solid var(--border-default); padding-top: 24px; }
       .side-by-side-container { flex-direction: column; }
       .scale-card-grid { grid-template-columns: 1fr; }
+      .sprite-control-bar { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
@@ -934,6 +990,7 @@
           <span id="modal-filesize">0 KB</span>
         </div>
         <div style="display:flex; gap:8px;">
+          <button class="btn-action btn-anim" id="modal-animate-btn">Sprite Player</button>
           <button class="btn-action" id="modal-open-btn">Open View Options</button>
           <button class="btn-action btn-primary" id="modal-download-btn">Download / Export</button>
         </div>
@@ -971,6 +1028,48 @@
           <strong style="color:#f78166;">16× Ultra</strong>
           <span style="font-size:12px; color:var(--text-muted);" id="scale-res-16">Probing...</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="sprite-modal" onclick="closeSpriteModal(event)">
+    <div class="modal-window" style="width:840px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div>
+          <span class="modal-title" id="sprite-modal-title">Sprite Sheet Animator</span>
+          <div style="font-size:12px; color:var(--text-muted);" id="sprite-modal-subtitle">Frame stepping player</div>
+        </div>
+        <button class="modal-close" onclick="closeSpriteModal()">&times;</button>
+      </div>
+
+      <div class="modal-body" style="background:#010409; min-height:420px;">
+        <div id="sprite-display" class="sprite-viewport"></div>
+      </div>
+
+      <div class="sprite-control-bar">
+        <div class="sprite-ctrl-group">
+          <button class="btn-action btn-primary" id="sprite-btn-play" onclick="toggleSpritePlayback()">Pause</button>
+          <button class="btn-action" onclick="stepSpriteFrame(-1)">◀ Prev</button>
+          <button class="btn-action" onclick="stepSpriteFrame(1)">Next ▶</button>
+          <span style="font-family:var(--font-mono); margin-left:6px;" id="sprite-frame-indicator">Frame: 1 / 1</span>
+        </div>
+
+        <div class="sprite-ctrl-group">
+          <label for="sprite-frames-input">Frames:</label>
+          <input type="number" id="sprite-frames-input" class="sprite-num-input" min="1" max="128" value="4" onchange="onSpriteConfigChanged()">
+          
+          <label for="sprite-fps-slider" style="margin-left:8px;">FPS (<span id="sprite-fps-label">8</span>):</label>
+          <input type="range" id="sprite-fps-slider" min="1" max="30" value="8" style="width:100px;" oninput="onSpriteFpsSlider(this.value)">
+
+          <label for="sprite-scale-select" style="margin-left:8px;">Zoom:</label>
+          <select id="sprite-scale-select" class="project-selector" style="font-size:12px; padding:2px 6px;" onchange="onSpriteConfigChanged()">
+            <option value="2">2×</option>
+            <option value="4" selected>4×</option>
+            <option value="6">6×</option>
+            <option value="8">8×</option>
+            <option value="12">12×</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -1068,6 +1167,16 @@
     let pendingExportUrl = "";
     let pendingExportFilename = "";
     let pendingExportMode = "download";
+
+    let spriteImg = null;
+    let spriteTimer = null;
+    let spriteCurrentFrame = 0;
+    let spriteTotalFrames = 4;
+    let spriteFps = 8;
+    let spriteScale = 4;
+    let spriteIsPlaying = true;
+    let spriteFrameW = 64;
+    let spriteFrameH = 64;
 
     function showToast(msg) {
       const toast = document.getElementById("toast");
@@ -1169,6 +1278,129 @@
       } catch (err) {
         window.open(pendingExportUrl, '_blank');
       }
+    }
+
+    function openSpritePlayer(url, filename) {
+      document.getElementById("sprite-modal-title").innerText = filename;
+      document.getElementById("sprite-modal").style.display = "flex";
+
+      spriteImg = new Image();
+      spriteImg.crossOrigin = "anonymous";
+      spriteImg.src = url;
+
+      spriteImg.onload = () => {
+        const w = spriteImg.naturalWidth;
+        const h = spriteImg.naturalHeight;
+        
+        let calculatedFrames = 1;
+        if (w >= h && h > 0) {
+          calculatedFrames = Math.max(1, Math.round(w / h));
+        }
+
+        spriteTotalFrames = calculatedFrames;
+        document.getElementById("sprite-frames-input").value = spriteTotalFrames;
+        document.getElementById("sprite-fps-slider").value = 8;
+        document.getElementById("sprite-fps-label").innerText = "8";
+        spriteFps = 8;
+        spriteCurrentFrame = 0;
+        spriteScale = parseInt(document.getElementById("sprite-scale-select").value) || 4;
+
+        updateSpriteDimensions();
+        startSpritePlayback();
+      };
+    }
+
+    function updateSpriteDimensions() {
+      if (!spriteImg) return;
+      const w = spriteImg.naturalWidth;
+      const h = spriteImg.naturalHeight;
+
+      spriteTotalFrames = Math.max(1, parseInt(document.getElementById("sprite-frames-input").value) || 1);
+      spriteScale = parseInt(document.getElementById("sprite-scale-select").value) || 4;
+
+      spriteFrameW = Math.round(w / spriteTotalFrames);
+      spriteFrameH = h;
+
+      document.getElementById("sprite-modal-subtitle").innerText = `${w}×${h} px sheet • Frame: ${spriteFrameW}×${spriteFrameH} px • ${spriteTotalFrames} total frames`;
+
+      const display = document.getElementById("sprite-display");
+      display.style.width = `${spriteFrameW * spriteScale}px`;
+      display.style.height = `${spriteFrameH * spriteScale}px`;
+      display.style.backgroundImage = `url("${spriteImg.src}")`;
+      display.style.backgroundRepeat = "no-repeat";
+      display.style.backgroundSize = `${w * spriteScale}px ${h * spriteScale}px`;
+
+      renderSpriteCurrentFrame();
+    }
+
+    function renderSpriteCurrentFrame() {
+      const display = document.getElementById("sprite-display");
+      const offset = -(spriteCurrentFrame * spriteFrameW * spriteScale);
+      display.style.backgroundPosition = `${offset}px 0px`;
+      document.getElementById("sprite-frame-indicator").innerText = `Frame: ${spriteCurrentFrame + 1} / ${spriteTotalFrames}`;
+    }
+
+    function startSpritePlayback() {
+      stopSpritePlayback();
+      spriteIsPlaying = true;
+      document.getElementById("sprite-btn-play").innerText = "Pause";
+      document.getElementById("sprite-btn-play").classList.remove("btn-action");
+      document.getElementById("sprite-btn-play").classList.add("btn-primary");
+
+      spriteTimer = setInterval(() => {
+        spriteCurrentFrame = (spriteCurrentFrame + 1) % spriteTotalFrames;
+        renderSpriteCurrentFrame();
+      }, 1000 / spriteFps);
+    }
+
+    function stopSpritePlayback() {
+      if (spriteTimer) {
+        clearInterval(spriteTimer);
+        spriteTimer = null;
+      }
+      spriteIsPlaying = false;
+      const btn = document.getElementById("sprite-btn-play");
+      if (btn) {
+        btn.innerText = "Play";
+        btn.classList.remove("btn-primary");
+        btn.classList.add("btn-action");
+      }
+    }
+
+    function toggleSpritePlayback() {
+      if (spriteIsPlaying) {
+        stopSpritePlayback();
+      } else {
+        startSpritePlayback();
+      }
+    }
+
+    function stepSpriteFrame(delta) {
+      stopSpritePlayback();
+      spriteCurrentFrame = (spriteCurrentFrame + delta + spriteTotalFrames) % spriteTotalFrames;
+      renderSpriteCurrentFrame();
+    }
+
+    function onSpriteFpsSlider(val) {
+      spriteFps = Math.max(1, parseInt(val) || 8);
+      document.getElementById("sprite-fps-label").innerText = spriteFps;
+      if (spriteIsPlaying) {
+        startSpritePlayback();
+      }
+    }
+
+    function onSpriteConfigChanged() {
+      updateSpriteDimensions();
+      if (spriteIsPlaying) {
+        startSpritePlayback();
+      }
+    }
+
+    function closeSpriteModal() {
+      stopSpritePlayback();
+      document.getElementById("sprite-modal").style.display = "none";
+      document.getElementById("sprite-display").style.backgroundImage = "none";
+      spriteImg = null;
     }
 
     function renderNavAuth() {
@@ -1645,6 +1877,7 @@
                   </div>
                 </div>
                 <div class="summary-actions">
+                  <button class="btn-action btn-anim" onclick="openSpritePlayer('${serverUrl}${head.raw_url}', '${head.file}')">Sprite Player</button>
                   <button class="btn-action" onclick="openExportModal('${serverUrl}${head.raw_url}', '${head.file}', 'open')">Open Scaled Tab</button>
                   <button class="btn-action btn-primary" onclick="openExportModal('${serverUrl}${head.raw_url}', '${head.file}', 'download')">Download</button>
                   ${previousRevisions.length > 0 ? `
@@ -1675,6 +1908,7 @@
                         </div>
                       </div>
                       <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn-action btn-anim" onclick="openSpritePlayer('${serverUrl}${rev.raw_url}', '${rev.file} (v${actualRevIndex + 1})')">Animate</button>
                         <button class="btn-action" onclick="openDirectModal('${rev.raw_url}', '${rev.file} (v${actualRevIndex + 1})', '${rev.manifest}', ${rev.size})">Inspect</button>
                         <button class="btn-action" onclick="openExportModal('${serverUrl}${rev.raw_url}', '${revDownloadName}', 'download')">Download</button>
                         <button class="btn-action btn-diff" onclick="initiateDiff('${fname}', ${actualRevIndex}, ${versions.length - 1})">Compare vs HEAD</button>
@@ -1799,6 +2033,7 @@
 
       document.getElementById("modal-manifest").innerText = manifest;
       document.getElementById("modal-filesize").innerText = `${(size / 1024).toFixed(1)} KB`;
+      document.getElementById("modal-animate-btn").onclick = () => openSpritePlayer(`${serverUrl}${rawUrl}`, name);
       document.getElementById("modal-open-btn").onclick = () => openExportModal(`${serverUrl}${rawUrl}`, name, 'open');
       document.getElementById("modal-download-btn").onclick = () => openExportModal(`${serverUrl}${rawUrl}`, name.replace(/\s+/g, '_'), 'download');
       document.getElementById("asset-modal").style.display = "flex";
@@ -1820,6 +2055,7 @@
         closeDiffModal();
         closeAuthModal();
         closeExportModal();
+        closeSpriteModal();
       }
     });
 
